@@ -33,9 +33,7 @@ var m=/[?&]id=([^&#]*)/.exec(location.search);
 
 // Sin ?id= -> presentación del proyecto (solo se descarga si alguien entra a la raíz)
 if(!m){
-  fetch("/inicio.html").then(function(x){return x.text()}).then(function(h){
-    document.open();document.write(h);document.close();
-  }).catch(function(){r.innerHTML="<h1>REFUA</h1><p>Ficha médica de emergencia por QR/NFC.</p>"});
+   location.replace("/inicio.html");
   return;
 }
 
