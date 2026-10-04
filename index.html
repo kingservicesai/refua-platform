@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>REFUA</title>
+<style>
+body{margin:0;font:18px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#111;background:#fff}
+main{max-width:560px;margin:0 auto;padding:12px}
+h1{font-size:15px;margin:0 0 10px;color:#555;font-weight:600}
+.s{border-top:3px solid #111;padding:8px 0 12px}
+.s h2{font-size:15px;margin:0 0 4px;color:#555;font-weight:600}
+.s p{margin:0;font-size:22px;font-weight:700;white-space:pre-line;overflow-wrap:anywhere}
+.s .n{font-weight:400;color:#666}
+.al{background:#fde8e6;border-top-color:#c4170c;padding:8px 10px 12px}
+.al h2{color:#c4170c}
+.nm{text-transform:uppercase}
+.bl p{font-size:28px}
+.call{display:block;margin:8px 0;padding:14px;background:#0a6b2f;color:#fff;text-decoration:none;font-weight:700;font-size:20px;border-radius:8px}
+.call small{display:block;font-weight:400;font-size:16px}
+.f{font-size:13px;color:#666;margin-top:14px}
+button{font:inherit;padding:10px 16px;margin-top:10px}
+</style></head>
+<body>
+<main id="r"><p>Cargando…</p></main>
+<script>
+(function(){
+// === CONFIGURA ESTOS DOS VALORES (los mismos que usas hoy en tu index.html) ===
+var U="https://lgbiulmpxqkneulkxbfs.supabase.co", K="sb_publishable_NFdQ-I1JvvUnxrQG1idZQQ_x2LN582b";
+// Columna del identificador en tu tabla pacientes:
+var COL="id_codigo";
+
+var r=document.getElementById("r");
+var m=/[?&]id=([^&#]*)/.exec(location.search);
+
+// Sin ?id= -> presentación del proyecto (solo se descarga si alguien entra a la raíz)
+if(!m){
+  location.replace("/inicio.html");
+  return;
+}
+
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function msg(t,d,retry){
+  r.textContent="";
+  r.appendChild(el("h1",0,"REFUA"));
+  var s=el("div","s");s.appendChild(el("p",0,t));if(d)s.appendChild(el("h2",0,d));
+  if(retry){var b=el("button",0,"Reintentar");b.onclick=function(){location.reload()};s.appendChild(b)}
+  r.appendChild(s);
+}
+function sec(t,v,c){
+  var s=el("div","s"+(c?" "+c:""));
+  s.appendChild(el("h2",0,t));
+  var p=el("p",v?0:"n",v||"Sin datos registrados");
+  s.appendChild(p);r.appendChild(s);
+}
+function call(n,t){
+  var d=String(t||"").replace(/[^\d+]/g,"");
+  if(d.replace(/\D/g,"").length<6)return;
+  var a=el("a","call","Llamar: "+(n||"Contacto"));
+  a.href="tel:"+d;
+  a.appendChild(el("small",0,String(t)));
+  r.appendChild(a);
+}
+
+var id="";try{id=decodeURIComponent(m[1]).trim()}catch(e){}
+if(!/^[A-Za-z0-9_-]{1,40}$/.test(id)){msg("Código no válido","Escanea de nuevo la pulsera o tarjeta.");return}
+
+var ac=new AbortController(),t=setTimeout(function(){ac.abort()},30000);
+fetch(U+"/rest/v1/pacientes?select=nombre_completo,cedula,grupo_sanguineo,alergias,patologias,medicacion,contacto_1_nombre,contacto_1_telefono,contacto_2_nombre,contacto_2_telefono&"+COL+"=eq."+encodeURIComponent(id)+"&limit=1",
+  {headers:{apikey:K},signal:ac.signal})
+.then(function(x){if(!x.ok)throw 0;return x.json()})
+.then(function(d){
+  clearTimeout(t);
+  var p=d&&d[0];
+  if(!p){msg("Dispositivo no activado o inexistente","Código: "+id);return}
+  r.textContent="";
+  r.appendChild(el("h1",0,"Ficha de emergencia · "+id));
+  var h=el("div","s");
+  h.appendChild(el("p","nm",p.nombre_completo||"Nombre no registrado"));
+  h.appendChild(el("h2",0,"C.I.: "+(p.cedula||"N/A")));
+  r.appendChild(h);
+  sec("Grupo sanguíneo",p.grupo_sanguineo,"bl");
+  sec("Alergias",p.alergias,"al");
+  sec("Patologías de base",p.patologias);
+  sec("Medicación continua",p.medicacion);
+  call(p.contacto_1_nombre,p.contacto_1_telefono);
+  call(p.contacto_2_nombre,p.contacto_2_telefono);
+  r.appendChild(el("p","f","Datos declarados por el paciente. REFUA no sustituye la evaluación médica."));
+}).catch(function(){clearTimeout(t);msg("Sin conexión con la ficha","La señal es débil. Intenta de nuevo.",1)});
+})();
+</script>
+</body></html>
