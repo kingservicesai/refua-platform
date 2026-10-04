@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>REFUA · Ficha médica de emergencia con QR y NFC</title>
+<meta name="description" content="REFUA vincula una pulsera, tarjeta o sticker con QR/NFC a los datos médicos críticos de una persona, para que rescatistas y personal médico los vean en segundos.">
+<meta name="theme-color" content="#c4170c">
+<style>
+:root{--ink:#1b1b1b;--mute:#585852;--line:#d9d8d0;--bg:#f7f6f2;--red:#c4170c;--redbg:#fde8e6;--ok:#0a6b2f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:inherit}
+a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.w{max-width:980px;margin:0 auto;padding:0 20px}
+header{border-bottom:3px solid var(--ink)}
+header .w{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;padding-bottom:12px}
+.logo{font-weight:900;font-size:22px;letter-spacing:.04em;text-decoration:none}
+.logo b{color:var(--red)}
+header span{color:var(--mute);font-size:14px}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;padding:44px 0 52px;align-items:start}
+h1{font-size:clamp(32px,6vw,52px);line-height:1.05;margin:0 0 16px;font-weight:900;letter-spacing:-.02em}
+.lead{font-size:19px;color:var(--mute);margin:0 0 22px;max-width:34em}
+.btn{display:inline-block;padding:13px 20px;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;border-radius:6px}
+.btn:hover{background:var(--red)}
+/* Ficha de ejemplo: es el mismo diseño de la ficha real */
+.card{background:#fff;border:2px solid var(--ink);border-radius:10px;overflow:hidden;font-size:15px}
+.card h2{margin:0;padding:8px 12px;background:var(--ink);color:#fff;font-size:14px;font-weight:600}
+.card div{padding:8px 12px;border-top:1px solid var(--line)}
+.card small{display:block;color:var(--mute);font-size:13px}
+.card strong{font-size:18px}
+.card .al{background:var(--redbg);border-top:0}
+.card .al small{color:var(--red)}
+.card .tel{background:var(--ok);color:#fff;font-weight:700;font-size:16px}
+.card .tel small{color:#d6f0de}
+.note{font-size:13px;color:var(--mute);margin:8px 2px 0}
+section{display:grid;grid-template-columns:200px 1fr;gap:28px;border-top:1px solid var(--line);padding:32px 0}
+section>h2{margin:0;font-size:20px;line-height:1.2}
+section p{margin:0 0 12px;max-width:40em}
+ol,ul{margin:0;padding-left:20px;max-width:40em}
+li{margin:0 0 10px}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.st h3{margin:0 0 8px;font-size:16px}
+.st ul{list-style:none;padding:0}
+.st li{padding-left:22px;position:relative;margin-bottom:6px}
+.st .d li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:900}
+.st .p li::before{content:"–";position:absolute;left:4px;color:var(--mute);font-weight:900}
+footer{border-top:3px solid var(--ink);margin-top:20px;padding:18px 0 30px;font-size:14px;color:var(--mute)}
+@media(max-width:760px){.hero,section,.st{grid-template-columns:1fr}.hero{padding:28px 0 36px;gap:28px}section{gap:12px}header span{display:none}}
+</style></head>
+<body>
+<header><div class="w"><a class="logo" href="/">REF<b>U</b>A</a><span>Identificación médica de emergencia</span></div></header>
+
+<div class="w">
+<div class="hero">
+  <div>
+    <h1>Alergias, patologías y contactos del paciente en segundos.</h1>
+    <p class="lead">Un código QR o NFC en una pulsera, tarjeta o sticker abre la ficha médica de la persona. Sin app, sin registro y sin esperas, incluso con señal débil.</p>
+    <a class="btn" href="/?id=REF-00001">Ver ficha de ejemplo</a>
+  </div>
+  <div>
+    <div class="card" aria-label="Ejemplo de ficha">
+      <h2>Ficha de emergencia · REF-00001</h2>
+      <div class="al"><small>Alergias</small><strong>Penicilina, látex</strong></div>
+      <div><small>Patologías de base</small><strong>Diabetes tipo 2, hipertensión</strong></div>
+      <div><small>Medicación continua</small><strong>Metformina, losartán</strong></div>
+      <div class="tel">Llamar: María (hija)<small>+58 412 000 0000</small></div>
+    </div>
+    <p class="note">Datos ficticios, solo de ejemplo.</p>
+  </div>
+</div>
+
+<section>
+  <h2>Cómo funciona</h2>
+  <ol>
+    <li>La persona recibe un identificador (QR/NFC) y su ficha médica se vincula a él desde el panel de administración.</li>
+    <li>Ante una urgencia, el rescatista escanea la pulsera, tarjeta o sticker con su teléfono.</li>
+    <li>Se abre la ficha: alergias, patologías de base, medicación y botones para llamar a los contactos de emergencia.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Hecho para la señal que haya</h2>
+  <p>La ficha de emergencia es una sola página de texto: sin imágenes, sin fuentes externas y sin librerías. Pide a la base de datos únicamente los campos que muestra.</p>
+  <p>Está pensada para cargar con conexión 2G o 3G, y si falla la red ofrece reintentar en un toque.</p>
+</section>
+
+<section>
+  <h2>Para quién es</h2>
+  <ul>
+    <li>Paramédicos, bomberos y personal de protección civil.</li>
+    <li>Primeros respondientes y personas con formación en primeros auxilios.</li>
+    <li>Personal médico en emergencias y urgencias hospitalarias.</li>
+    <li>Pacientes, tanto del sistema privado como del público, y sus familias.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Estado del proyecto</h2>
+  <div class="st">
+    <div class="d"><h3>Ya funciona</h3><ul>
+      <li>Dominio refua.com.ve con HTTPS</li>
+      <li>Ficha pública por QR/NFC</li>
+      <li>Panel para crear y editar fichas</li>
+      <li>Contactos de emergencia con llamada directa</li>
+    </ul></div>
+    <div class="p"><h3>En camino</h3><ul>
+      <li>Acceso protegido al panel de administración</li>
+      <li>Generador y exportador de códigos QR</li>
+      <li>Validación de teléfonos y datos</li>
+      <li>Aviso al contacto al escanear la ficha</li>
+    </ul></div>
+  </div>
+</section>
+</div>
+
+<footer><div class="w">REFUA · Proyecto en fase temprana de desarrollo. La información de las fichas es declarada por cada paciente y no sustituye la evaluación médica.</div></footer>
+</body></html>
