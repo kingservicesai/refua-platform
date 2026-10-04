@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REFUA - Panel de Administración</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eceff1; margin: 0; padding: 16px; color: #222; }
+        .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; color: #1565c0; text-align: center; font-size: 1.3em; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 4px; color: #444; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
+        button { width: 100%; padding: 12px; background: #1565c0; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1em; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #0d47a1; }
+        .btn-search { background: #37474f; margin-top: 4px; }
+        .msg { padding: 10px; border-radius: 6px; margin-top: 10px; text-align: center; font-weight: bold; display: none; }
+        .msg-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .msg-error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🛠️ REFUA - GESTIÓN DE PACIENTES</h2>
+
+    <!-- LOGIN -->
+    <div id="section-login">
+        <div class="form-group">
+            <label>Correo Administrador</label>
+            <input type="email" id="login-email" placeholder="admin@refua.com.ve">
+        </div>
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="login-pass" placeholder="******">
+        </div>
+        <button onclick="login()">Iniciar Sesión</button>
+    </div>
+
+    <!-- PANEL PRINCIPAL (Oculto hasta hacer login) -->
+    <div id="section-app" style="display: none;">
+        
+        <!-- BÚSQUEDA / ACTIVACIÓN DE CÓDIGO -->
+        <div style="background: #f0f4f8; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+            <label>Código del Sticker / Brazalete (ID):</label>
+            <input type="text" id="search-id" placeholder="Ej: REF-00001">
+            <button class="btn-search" onclick="buscarPaciente()">Cargar / Buscar Código</button>
+        </div>
+
+        <form id="patient-form" onsubmit="guardarPaciente(event)">
+            <div class="form-group">
+                <label>Estado del Dispositivo</label>
+                <select id="estado">
+                    <option value="inactivo">Inactivo (No vendido / Sin datos)</option>
+                    <option value="activo">Activo (Visible en escaneo público)</option>
+                    <option value="bloqueado">Bloqueado (Perdido / Reportado)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Cliente / Convenio</label>
+                <select id="cliente_tipo">
+                    <option value="publico">Público General</option>
+                    <option value="aseguradora">Aseguradora</option>
+                    <option value="gobierno">Gobierno / Ente Público</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Nombre Completo del Paciente</label>
+                <input type="text" id="nombre_completo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Cédula de Identidad / Pasaporte</label>
+                <input type="text" id="cedula" required>
+            </div>
+
+            <div class="form-group">
+                <label>Grupo Sanguíneo y Factor RH</label>
+                <select id="grupo_sanguineo">
+                    <option value="O+">O Positivo (O+)</option>
+                    <option value="O-">O Negativo (O-)</option>
+                    <option value="A+">A Positivo (A+)</option>
+                    <option value="A-">A Negativo (A-)</option>
+                    <option value="B+">B Positivo (B+)</option>
+                    <option value="B-">B Negativo (B-)</option>
+                    <option value="AB+">AB Positivo (AB+)</option>
+                    <option value="AB-">AB Negativo (AB-)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Alergias Críticas</label>
+                <input type="text" id="alergias" placeholder="Ej: Penicilina, AINEs">
+            </div>
+
+            <div class="form-group">
+                <label>Patologías de Base</label>
+                <input type="text" id="patologias" placeholder="Ej: Diabetes Tipo 2, Hipertensión">
+            </div>
+
+            <div class="form-group">
+                <label>Medicación Continua</label>
+                <input type="text" id="medicacion" placeholder="Ej: Metformina 850mg">
+            </div>
+
+            <div class="form-group">
+                <label>Contacto Emergencia 1 (Nombre y Parentesco)</label>
+                <input type="text" id="contacto_1_nombre" placeholder="Ej: María Pérez (Madre)">
+            </div>
+            <div class="form-group">
+                <label>Contacto Emergencia 1 (Teléfono)</label>
+                <input type="text" id="contacto_1_telefono" placeholder="Ej: 04141234567">
+            </div>
+
+            <div class="form-group">
+                <label>Contacto Emergencia 2 (Nombre y Parentesco)</label>
+                <input type="text" id="contacto_2_nombre" placeholder="Ej: Carlos Pérez (Hermano)">
+            </div>
+            <div class="form-group">
+                <label>Contacto Emergencia 2 (Teléfono)</label>
+                <input type="text" id="contacto_2_telefono" placeholder="Ej: 04127654321">
+            </div>
+
+            <button type="submit" style="background: #2e7d32;">💾 GUARDAR Y ACTIVAR FICHA</button>
+        </form>
+
+        <div id="msg" class="msg"></div>
+        <button onclick="logout()" style="background: #c62828; margin-top: 20px;">Cerrar Sesión</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Configuración oficial de Supabase para REFUA
+    const SUPABASE_URL = 'https://lgbiulmpxqkneulkxbfs.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_NFdQ-I1JvvUnxrQG1idZQQ_x2LN582b';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function login() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-pass').value;
+
+        const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            alert('Error al iniciar sesión: ' + error.message);
+        } else {
+            document.getElementById('section-login').style.display = 'none';
+            document.getElementById('section-app').style.display = 'block';
+        }
+    }
+
+    async function buscarPaciente() {
+        const id = document.getElementById('search-id').value.trim();
+        if (!id) return alert('Ingresa un código ID.');
+
+        const { data, error } = await _supabase
+            .from('pacientes')
+            .select('*')
+            .eq('id_codigo', id)
+            .single();
+
+        if (data) {
+            document.getElementById('estado').value = data.estado || 'inactivo';
+            document.getElementById('cliente_tipo').value = data.cliente_tipo || 'publico';
+            document.getElementById('nombre_completo').value = data.nombre_completo || '';
+            document.getElementById('cedula').value = data.cedula || '';
+            document.getElementById('grupo_sanguineo').value = data.grupo_sanguineo || 'O+';
+            document.getElementById('alergias').value = data.alergias || '';
+            document.getElementById('patologias').value = data.patologias || '';
+            document.getElementById('medicacion').value = data.medicacion || '';
+            document.getElementById('contacto_1_nombre').value = data.contacto_1_nombre || '';
+            document.getElementById('contacto_1_telefono').value = data.contacto_1_telefono || '';
+            document.getElementById('contacto_2_nombre').value = data.contacto_2_nombre || '';
+            document.getElementById('contacto_2_telefono').value = data.contacto_2_telefono || '';
+            mostrarMensaje('Ficha cargada con éxito.', 'success');
+        } else {
+            document.getElementById('patient-form').reset();
+            mostrarMensaje('Código nuevo. Llena el formulario para registrarlo.', 'success');
+        }
+    }
+
+    async function guardarPaciente(e) {
+        e.preventDefault();
+        const id = document.getElementById('search-id').value.trim();
+        if (!id) return alert('Debes especificar el código ID del dispositivo.');
+
+        const payload = {
+            id_codigo: id,
+            estado: document.getElementById('estado').value,
+            cliente_tipo: document.getElementById('cliente_tipo').value,
+            nombre_completo: document.getElementById('nombre_completo').value,
+            cedula: document.getElementById('cedula').value,
+            grupo_sanguineo: document.getElementById('grupo_sanguineo').value,
+            alergias: document.getElementById('alergias').value,
+            patologias: document.getElementById('patologias').value,
+            medicacion: document.getElementById('medicacion').value,
+            contacto_1_nombre: document.getElementById('contacto_1_nombre').value,
+            contacto_1_telefono: document.getElementById('contacto_1_telefono').value,
+            contacto_2_nombre: document.getElementById('contacto_2_nombre').value,
+            contacto_2_telefono: document.getElementById('contacto_2_telefono').value
+        };
+
+        const { error } = await _supabase.from('pacientes').upsert(payload);
+
+        if (error) {
+            mostrarMensaje('Error al guardar: ' + error.message, 'error');
+        } else {
+            mostrarMensaje('✅ Ficha guardada y actualizada correctamente.', 'success');
+        }
+    }
+
+    function mostrarMensaje(txt, tipo) {
+        const msgDiv = document.getElementById('msg');
+        msgDiv.innerText = txt;
+        msgDiv.className = 'msg ' + (tipo === 'success' ? 'msg-success' : 'msg-error');
+        msgDiv.style.display = 'block';
+        setTimeout(() => { msgDiv.style.display = 'none'; }, 4000);
+    }
+
+    async function logout() {
+        await _supabase.auth.signOut();
+        location.reload();
+    }
+</script>
+
+</body>
+</html>
