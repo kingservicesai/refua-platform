@@ -24,7 +24,7 @@ button{font:inherit;padding:10px 16px;margin-top:10px}
 <script>
 (function(){
 // === CONFIGURA ESTOS DOS VALORES (los mismos que usas hoy en tu index.html) ===
-var U="https://TU-PROYECTO.supabase.co", K="TU_ANON_KEY";
+var U="https://lgbiulmpxqkneulkxbfs.supabase.co", K="sb_publishable_NFdQ-I1JvvUnxrQG1idZQQ_x2LN582b";
 // Columna del identificador en tu tabla pacientes:
 var COL="id_codigo";
 
@@ -47,7 +47,7 @@ function msg(t,d,retry){
   if(retry){var b=el("button",0,"Reintentar");b.onclick=function(){location.reload()};s.appendChild(b)}
   r.appendChild(s);
 }
-function sec(t,v,c){
+function sec(t,v,c)
   var s=el("div","s"+(c?" "+c:""));
   s.appendChild(el("h2",0,t));
   var p=el("p",v?0:"n",v||"Sin datos registrados");
