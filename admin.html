@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2C6670">
+<title>REFUA · Panel de administración</title>
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<style>
+:root{
+  --t900:#1c4a53;--t700:#2c6670;--t600:#3a8088;--t500:#48b0b0;--g500:#60c098;--m200:#cdeee8;--m100:#e6f6f3;--m50:#f4fbf9;
+  --ink:#16343c;--mute:#5a7279;--line:#d6e5e3;--bg:#eff6f5;--red:#c4170c;--redbg:#fde8e6;--ok:#0a6b2f;--okbg:#e5f5ea;
+  --grad:linear-gradient(135deg,#2c6670,#2f8a74);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+
+/* Barra superior */
+.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line)}
+.top .in{max-width:920px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img:first-child{width:34px}
+.brand img:nth-child(2){width:92px}
+.brand .badge{margin-left:6px;padding:3px 10px;border-radius:999px;background:var(--m100);color:var(--t700);font-size:12px;font-weight:700;white-space:nowrap}
+.session{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--mute);min-width:0}
+.session span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+
+.wrap{max-width:920px;margin:0 auto;padding:26px 20px 120px}
+
+/* Botones */
+.btn{appearance:none;border:0;cursor:pointer;font:inherit;font-weight:700;border-radius:10px;padding:12px 20px;line-height:1.2;transition:background .15s,transform .15s,box-shadow .15s}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn-p{background:var(--t700);color:#fff}
+.btn-p:hover:not(:disabled){background:var(--t900)}
+.btn-ok{background:var(--ok);color:#fff;box-shadow:0 6px 16px rgba(10,107,47,.25)}
+.btn-ok:hover:not(:disabled){background:#08561f}
+.btn-o{background:#fff;color:var(--t700);border:2px solid var(--line);padding:10px 16px}
+.btn-o:hover{border-color:var(--t500);background:var(--m50)}
+.btn-sm{padding:8px 14px;font-size:14px}
+:focus-visible{outline:3px solid var(--t500);outline-offset:2px}
+
+/* Login */
+.login{max-width:420px;margin:56px auto 0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:0 18px 44px rgba(28,74,83,.12)}
+.login .logo{width:64px;margin:0 auto 14px}
+.login h1{margin:0 0 4px;text-align:center;font-size:22px;color:var(--t900)}
+.login .lead{margin:0 0 24px;text-align:center;color:var(--mute);font-size:15px}
+.login .btn{width:100%;margin-top:6px}
+.err{margin:0 0 14px;padding:10px 12px;border-radius:10px;background:var(--redbg);color:var(--red);font-size:14px;font-weight:600}
+
+/* Formularios */
+label{display:block;margin:0 0 5px;font-size:13px;font-weight:700;color:var(--t900)}
+input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid #c9d9d7;border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:15px}
+textarea{resize:vertical;min-height:70px}
+input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px solid rgba(72,176,176,.25);outline-offset:0}
+.f{margin-bottom:14px}
+.hint{margin:5px 0 0;font-size:12.5px;color:var(--mute)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+
+/* Tarjetas */
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;margin-bottom:18px;overflow:hidden}
+.panel>header{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--m50);border-bottom:1px solid var(--line)}
+.panel>header b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--grad);color:#fff;font-size:14px;flex:none}
+.panel>header h2{margin:0;font-size:16px;color:var(--t900)}
+.panel .body{padding:20px 22px 8px}
+
+/* Buscador de código */
+.finder{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 10px 28px rgba(28,74,83,.07)}
+.finder h1{margin:0 0 4px;font-size:20px;color:var(--t900)}
+.finder p{margin:0 0 14px;color:var(--mute);font-size:14.5px}
+.find-row{display:flex;gap:10px}
+.find-row .btn{white-space:nowrap}
+.find-row input{font:700 18px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.04em;text-transform:uppercase}
+.chip{display:inline-block;margin-top:12px;padding:5px 12px;border-radius:999px;background:var(--m100);color:var(--t700);font-size:13px;font-weight:700}
+.chip.new{background:#fff4d6;color:#7a5a00}
+.chip.edit{background:var(--okbg);color:var(--ok)}
+
+/* Estado del dispositivo */
+.est{position:relative}
+.dot{position:absolute;left:12px;top:36px;width:11px;height:11px;border-radius:50%;background:#9aa9ad;pointer-events:none}
+.dot.activo{background:#1fa551}.dot.bloqueado{background:var(--red)}
+.est select{padding-left:32px}
+
+/* Contactos */
+.contact{padding:16px 16px 4px;border:1.5px dashed #c9d9d7;border-radius:14px;margin-bottom:16px;background:#fcfefd}
+.contact h3{margin:0 0 12px;font-size:14px;color:var(--t700)}
+
+/* Enlace de la ficha */
+.link{background:var(--m100);border:1px solid var(--m200);border-radius:18px;padding:18px 22px;margin-bottom:18px}
+.link h3{margin:0 0 8px;font-size:15px;color:var(--t900)}
+.link code{display:block;padding:10px 12px;background:#fff;border:1px solid var(--m200);border-radius:10px;font:600 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;color:var(--t700)}
+.link .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.link .warn{margin-top:10px;color:var(--red);font-weight:700;font-size:14px}
+.link a.btn{text-decoration:none;display:inline-block}
+
+/* Barra de acciones */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:25;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+.bar .in{max-width:920px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;justify-content:flex-end;align-items:center}
+.bar .btn-ok{flex:1;max-width:340px;padding:14px 20px;font-size:16px}
+
+/* Aviso flotante */
+.toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,16px);z-index:40;max-width:min(92vw,520px);padding:12px 18px;border-radius:12px;font-weight:700;font-size:14.5px;box-shadow:0 12px 30px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.ok{background:var(--ok);color:#fff}
+.toast.er{background:var(--red);color:#fff}
+
+@media(max-width:640px){
+  .g2{grid-template-columns:1fr}
+  .brand .badge,.session span{display:none}
+  .find-row{flex-direction:column}
+  .wrap{padding:18px 14px 120px}
+  .panel .body{padding:16px 16px 4px}
+  .panel>header{padding:12px 16px}
+  .bar .in{padding:10px 14px}
+  .bar .btn-o{display:none}
+  .bar .btn-ok{max-width:none}
+}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="in">
+  <div class="brand">
+    <img src="/assets/logo-icon.png" width="207" height="220" alt="">
+    <img src="/assets/logo-wordmark.png" width="420" height="87" alt="REFUA">
+    <span class="badge">Panel de administración</span>
+  </div>
+  <div class="session" id="session-bar" hidden>
+    <span id="user-email"></span>
+    <button class="btn btn-o btn-sm" type="button" onclick="logout()">Cerrar sesión</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+  <!-- ACCESO -->
+  <section id="section-login" class="login">
+    <img class="logo" src="/assets/logo-icon.png" width="207" height="220" alt="REFUA">
+    <h1>Acceso de administradores</h1>
+    <p class="lead">Solo personal autorizado de REFUA.</p>
+    <form id="login-form" onsubmit="event.preventDefault();login()">
+      <p class="err" id="login-error" hidden></p>
+      <div class="f">
+        <label for="login-email">Correo electrónico</label>
+        <input type="email" id="login-email" placeholder="admin@refua.com.ve" autocomplete="username" required>
+      </div>
+      <div class="f">
+        <label for="login-pass">Contraseña</label>
+        <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-p" id="btn-login" type="submit">Iniciar sesión</button>
+    </form>
+  </section>
+
+  <!-- PANEL -->
+  <section id="section-app" hidden>
+
+    <div class="finder">
+      <h1>Ficha del paciente</h1>
+      <p>Escribe el código del sticker o pulsera. Si ya existe se carga para editarlo; si no, se crea una ficha nueva.</p>
+      <div class="find-row">
+        <input type="text" id="search-id" placeholder="REF-00001" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Código del dispositivo">
+        <button class="btn btn-p" type="button" onclick="buscarPaciente()">Cargar / Buscar</button>
+      </div>
+      <span class="chip" id="modo">Sin código cargado</span>
+    </div>
+
+    <div class="link" id="linkbox" hidden></div>
+
+    <form id="patient-form" onsubmit="guardarPaciente(event)">
+
+      <div class="panel">
+        <header><b>1</b><h2>Dispositivo</h2></header>
+        <div class="body g2">
+          <div class="f est">
+            <label for="estado">Estado</label>
+            <span class="dot" id="estado-dot"></span>
+            <select id="estado">
+              <option value="inactivo">Inactivo (sin datos / no vendido)</option>
+              <option value="activo">Activo (visible al escanear)</option>
+              <option value="bloqueado">Bloqueado (perdido / reportado)</option>
+            </select>
+          </div>
+          <div class="f">
+            <label for="cliente_tipo">Tipo de cliente / convenio</label>
+            <select id="cliente_tipo">
+              <option value="publico">Público general</option>
+              <option value="aseguradora">Aseguradora</option>
+              <option value="gobierno">Gobierno / ente público</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <header><b>2</b><h2>Datos del paciente</h2></header>
+        <div class="body">
+          <div class="f">
+            <label for="nombre_completo">Nombre completo</label>
+            <input type="text" id="nombre_completo" maxlength="120" required autocomplete="off">
+          </div>
+          <div class="g2">
+            <div class="f">
+              <label for="cedula">Cédula de identidad / pasaporte</label>
+              <input type="text" id="cedula" maxlength="30" required autocomplete="off" placeholder="Ej: V-12345678">
+            </div>
+            <div class="f">
+              <label for="grupo_sanguineo">Grupo sanguíneo y factor RH</label>
+              <select id="grupo_sanguineo">
+                <option value="">Desconocido / sin dato</option>
+                <option value="O+">O positivo (O+)</option>
+                <option value="O-">O negativo (O-)</option>
+                <option value="A+">A positivo (A+)</option>
+                <option value="A-">A negativo (A-)</option>
+                <option value="B+">B positivo (B+)</option>
+                <option value="B-">B negativo (B-)</option>
+                <option value="AB+">AB positivo (AB+)</option>
+                <option value="AB-">AB negativo (AB-)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <header><b>3</b><h2>Información médica crítica</h2></header>
+        <div class="body">
+          <div class="f">
+            <label for="alergias">Alergias críticas</label>
+            <textarea id="alergias" maxlength="300" placeholder="Ej: Penicilina, AINEs"></textarea>
+            <p class="hint">Si no tiene, escribe «Ninguna conocida»: un campo vacío se muestra como «sin datos» y no es lo mismo.</p>
+          </div>
+          <div class="f">
+            <label for="patologias">Patologías de base</label>
+            <textarea id="patologias" maxlength="300" placeholder="Ej: Diabetes tipo 2, hipertensión"></textarea>
+          </div>
+          <div class="f">
+            <label for="medicacion">Medicación continua</label>
+            <textarea id="medicacion" maxlength="300" placeholder="Ej: Metformina 850 mg"></textarea>
+            <p class="hint">Máximo 300 caracteres por campo, para que la ficha cargue rápido con poca señal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <header><b>4</b><h2>Contactos de emergencia</h2></header>
+        <div class="body">
+          <div class="contact">
+            <h3>Contacto 1</h3>
+            <div class="g2">
+              <div class="f">
+                <label for="contacto_1_nombre">Nombre y parentesco</label>
+                <input type="text" id="contacto_1_nombre" maxlength="80" placeholder="Ej: María Pérez (madre)" autocomplete="off">
+              </div>
+              <div class="f">
+                <label for="contacto_1_telefono">Teléfono</label>
+                <input type="tel" id="contacto_1_telefono" maxlength="20" placeholder="Ej: 04141234567" autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <div class="contact">
+            <h3>Contacto 2 (opcional)</h3>
+            <div class="g2">
+              <div class="f">
+                <label for="contacto_2_nombre">Nombre y parentesco</label>
+                <input type="text" id="contacto_2_nombre" maxlength="80" placeholder="Ej: Carlos Pérez (hermano)" autocomplete="off">
+              </div>
+              <div class="f">
+                <label for="contacto_2_telefono">Teléfono</label>
+                <input type="tel" id="contacto_2_telefono" maxlength="20" placeholder="Ej: 04127654321" autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <p class="hint" style="margin:-4px 0 14px">Los teléfonos se guardan en formato internacional (04141234567 pasa a +584141234567).</p>
+        </div>
+      </div>
+
+      <div class="bar"><div class="in">
+        <button class="btn btn-o" type="button" onclick="limpiarFormulario()">Limpiar</button>
+        <button class="btn btn-ok" id="btn-save" type="submit">💾 Guardar ficha</button>
+      </div></div>
+    </form>
+  </section>
+</div>
+
+<div class="toast" id="msg" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Configuración oficial de Supabase para REFUA
+    const SUPABASE_URL = 'https://lgbiulmpxqkneulkxbfs.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_NFdQ-I1JvvUnxrQG1idZQQ_x2LN582b';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const $ = id => document.getElementById(id);
+    let idCargado = null; // código cuya ficha está cargada en el formulario
+    let toastT = null;
+
+    function mostrarApp(email) {
+        $('section-login').hidden = true;
+        $('section-app').hidden = false;
+        $('session-bar').hidden = false;
+        if (email) $('user-email').textContent = email;
+    }
+
+    // Si ya hay sesión iniciada, no pedir login de nuevo al recargar
+    _supabase.auth.getSession().then(({ data }) => {
+        if (data && data.session) mostrarApp(data.session.user.email);
+    });
+
+    async function login() {
+        const email = $('login-email').value.trim();
+        const password = $('login-pass').value;
+        const err = $('login-error');
+        err.hidden = true;
+        if (!email || !password) {
+            err.textContent = 'Escribe tu correo y tu contraseña.';
+            err.hidden = false;
+            return;
+        }
+        const btn = $('btn-login');
+        btn.disabled = true; btn.textContent = 'Entrando…';
+        const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+        btn.disabled = false; btn.textContent = 'Iniciar sesión';
+        if (error) {
+            err.textContent = 'No se pudo iniciar sesión: ' + error.message;
+            err.hidden = false;
+        } else {
+            $('login-pass').value = '';
+            mostrarApp((data && data.user && data.user.email) || email);
+        }
+    }
+
+    function idActual() {
+        return $('search-id').value.trim().toUpperCase();
+    }
+
+    function idValido(id) {
+        return /^[A-Z0-9_-]{1,40}$/.test(id); // mismo formato que acepta la ficha pública
+    }
+
+    // Devuelve '' si está vacío, null si es inválido, o el número en formato internacional
+    function normTel(v) {
+        v = (v || '').trim();
+        if (!v) return '';
+        let d = v.replace(/[^\d+]/g, '');
+        if (/^0\d{10}$/.test(d)) d = '+58' + d.slice(1);        // 04141234567 -> +584141234567
+        else if (/^4\d{9}$/.test(d)) d = '+58' + d;             // 4141234567  -> +584141234567
+        else if (/^\d{11,15}$/.test(d)) d = '+' + d;            // 584141234567 -> +584141234567
+        return /^\+\d{8,15}$/.test(d) ? d : null;
+    }
+
+    function pintarEstado() {
+        $('estado-dot').className = 'dot ' + $('estado').value;
+    }
+    $('estado').addEventListener('change', pintarEstado);
+
+    function setModo(texto, clase) {
+        const m = $('modo');
+        m.textContent = texto;
+        m.className = 'chip' + (clase ? ' ' + clase : '');
+    }
+
+    function ocultarEnlace() {
+        const b = $('linkbox');
+        b.hidden = true;
+        b.textContent = '';
+    }
+
+    function mostrarEnlace(id, estado) {
+        const url = location.origin + '/?id=' + encodeURIComponent(id);
+        const b = $('linkbox');
+        b.textContent = '';
+        const h = document.createElement('h3');
+        h.textContent = 'Enlace de la ficha (para el QR / NFC)';
+        b.appendChild(h);
+        const c = document.createElement('code');
+        c.textContent = url;
+        b.appendChild(c);
+        if (estado !== 'activo') {
+            const w = document.createElement('div');
+            w.className = 'warn';
+            w.textContent = 'Estado «' + estado + '»: el enlace mostrará «no activado» hasta que la actives.';
+            b.appendChild(w);
+        }
+        const row = document.createElement('div');
+        row.className = 'row';
+        const copy = document.createElement('button');
+        copy.type = 'button'; copy.className = 'btn btn-p btn-sm'; copy.textContent = 'Copiar enlace';
+        copy.onclick = async () => {
+            try { await navigator.clipboard.writeText(url); copy.textContent = 'Copiado ✓'; }
+            catch (e) { copy.textContent = 'Copia el enlace manualmente'; }
+        };
+        const open = document.createElement('a');
+        open.className = 'btn btn-o btn-sm'; open.href = url; open.target = '_blank'; open.rel = 'noopener';
+        open.textContent = 'Abrir ficha';
+        row.appendChild(copy); row.appendChild(open);
+        b.appendChild(row);
+        b.hidden = false;
+    }
+
+    function limpiarFormulario() {
+        $('patient-form').reset();
+        $('search-id').value = '';
+        idCargado = null;
+        ocultarEnlace();
+        pintarEstado();
+        setModo('Sin código cargado');
+        $('search-id').focus();
+    }
+
+    async function buscarPaciente() {
+        const id = idActual();
+        if (!id) return mostrarMensaje('Ingresa un código ID.', 'error');
+        if (!idValido(id)) return mostrarMensaje('El código solo puede tener letras, números, guion y guion bajo (máx. 40).', 'error');
+        $('search-id').value = id;
+        ocultarEnlace();
+
+        const { data, error } = await _supabase
+            .from('pacientes')
+            .select('*')
+            .eq('id_codigo', id)
+            .maybeSingle();
+
+        if (error) {
+            return mostrarMensaje('Error al buscar: ' + error.message, 'error');
+        }
+
+        idCargado = id;
+        if (data) {
+            $('estado').value = data.estado || 'inactivo';
+            $('cliente_tipo').value = data.cliente_tipo || 'publico';
+            $('nombre_completo').value = data.nombre_completo || '';
+            $('cedula').value = data.cedula || '';
+            $('grupo_sanguineo').value = data.grupo_sanguineo || '';
+            $('alergias').value = data.alergias || '';
+            $('patologias').value = data.patologias || '';
+            $('medicacion').value = data.medicacion || '';
+            $('contacto_1_nombre').value = data.contacto_1_nombre || '';
+            $('contacto_1_telefono').value = data.contacto_1_telefono || '';
+            $('contacto_2_nombre').value = data.contacto_2_nombre || '';
+            $('contacto_2_telefono').value = data.contacto_2_telefono || '';
+            pintarEstado();
+            setModo('Editando ' + id, 'edit');
+            mostrarMensaje('Ficha cargada con éxito.', 'success');
+            mostrarEnlace(id, data.estado || 'inactivo');
+        } else {
+            $('patient-form').reset();
+            $('estado').value = 'activo'; // código nuevo: listo para activar
+            pintarEstado();
+            setModo('Ficha nueva · ' + id, 'new');
+            mostrarMensaje('Código nuevo. Llena el formulario para registrarlo.', 'success');
+        }
+    }
+
+    async function guardarPaciente(e) {
+        e.preventDefault();
+        const id = idActual();
+        if (!id) { $('search-id').focus(); return mostrarMensaje('Debes especificar el código ID del dispositivo.', 'error'); }
+        if (!idValido(id)) return mostrarMensaje('El código solo puede tener letras, números, guion y guion bajo (máx. 40).', 'error');
+
+        // Evita guardar los datos de una ficha cargada bajo otro código por error
+        if (idCargado && idCargado !== id &&
+            !confirm('Cargaste la ficha ' + idCargado + ' pero vas a guardar bajo el código ' + id + '. ¿Continuar?')) return;
+
+        const tel1 = normTel($('contacto_1_telefono').value);
+        const tel2 = normTel($('contacto_2_telefono').value);
+        if (tel1 === null || tel2 === null) {
+            return mostrarMensaje('Teléfono no válido. Usa formato como 04141234567 o +584141234567.', 'error');
+        }
+
+        const val = k => $(k).value.trim();
+        const payload = {
+            id_codigo: id,
+            estado: val('estado'),
+            cliente_tipo: val('cliente_tipo'),
+            nombre_completo: val('nombre_completo'),
+            cedula: val('cedula'),
+            grupo_sanguineo: val('grupo_sanguineo'),
+            alergias: val('alergias'),
+            patologias: val('patologias'),
+            medicacion: val('medicacion'),
+            contacto_1_nombre: val('contacto_1_nombre'),
+            contacto_1_telefono: tel1,
+            contacto_2_nombre: val('contacto_2_nombre'),
+            contacto_2_telefono: tel2
+        };
+
+        const btn = $('btn-save');
+        btn.disabled = true; btn.textContent = 'Guardando…';
+        // .select() devuelve la fila guardada: si viene vacía, no se guardó nada
+        const { data, error } = await _supabase.from('pacientes').upsert(payload).select();
+        btn.disabled = false; btn.textContent = '💾 Guardar ficha';
+
+        if (error) {
+            mostrarMensaje('Error al guardar: ' + error.message, 'error');
+        } else if (!data || data.length === 0) {
+            mostrarMensaje('No se guardó nada. Cierra sesión y vuelve a entrar.', 'error');
+        } else {
+            idCargado = id;
+            $('contacto_1_telefono').value = tel1;
+            $('contacto_2_telefono').value = tel2;
+            setModo('Editando ' + id, 'edit');
+            mostrarMensaje('✅ Ficha guardada correctamente.', 'success');
+            mostrarEnlace(id, data[0].estado);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function mostrarMensaje(txt, tipo) {
+        const t = $('msg');
+        t.textContent = txt;
+        t.className = 'toast show ' + (tipo === 'success' ? 'ok' : 'er');
+        clearTimeout(toastT);
+        toastT = setTimeout(() => { t.className = 'toast'; }, tipo === 'success' ? 4500 : 7000);
+    }
+
+    async function logout() {
+        await _supabase.auth.signOut();
+        location.reload();
+    }
+</script>
+
+</body>
+</html>
