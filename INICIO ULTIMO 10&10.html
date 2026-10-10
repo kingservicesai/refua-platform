@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>REFUA · Identificación médica de emergencia con QR y NFC</title>
+<meta name="description" content="REFUA vincula una pulsera, tarjeta o sticker con QR/NFC a los datos médicos críticos de una persona, para que rescatistas y personal médico los vean en segundos.">
+<meta name="theme-color" content="#2C6670">
+<meta property="og:type" content="website">
+<meta property="og:title" content="REFUA · Identificación médica de emergencia">
+<meta property="og:description" content="Alergias, patologías y contactos del paciente en segundos, con un escaneo QR o NFC.">
+<meta property="og:image" content="https://refua.com.ve/assets/og.jpg">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<script>if("IntersectionObserver"in window)document.documentElement.classList.add("js")</script>
+<style>
+:root{
+  --ink:#1d1d1f;--gray:#6e6e73;--bg2:#f5f5f7;--line:rgba(0,0,0,.12);
+  --teal:#2c6670;--teal-d:#1c4a53;--green:#60c098;--red:#c4170c;--red-d:#9f1209;--night:#0b1d21;
+  --mint:#e6f6f3;--mint2:#cdeee8;--ok:#0a6b2f;--redbg:#fde8e6;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --r:1.75rem;--pad:clamp(1.25rem,4vw,2rem);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:3.5rem;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;color:var(--ink);background:#fff;font:400 1.0625rem/1.47 var(--font);font-optical-sizing:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+::selection{background:var(--mint2);color:var(--teal-d)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:.5rem}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{text-wrap:pretty}
+.w{max-width:69rem;margin:0 auto;padding:0 var(--pad)}
+
+/* Aparición al hacer scroll: solo opacity y transform, una vez */
+.js [data-r]{opacity:0;transform:translateY(1.75rem);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out);transition-delay:calc(var(--i,0) * 70ms)}
+.js [data-r][data-v]{opacity:1;transform:none}
+
+/* Navegación: material translúcido */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);box-shadow:0 1px 0 rgba(0,0,0,.08)}
+header .w{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:3.25rem}
+.brand{display:flex;align-items:center;gap:.55rem;text-decoration:none}
+.brand img:first-child{width:2rem;height:auto}
+.brand img:last-child{width:5.6rem;height:auto}
+header nav{display:flex;align-items:center;gap:2rem;font-size:.8125rem}
+header nav a:not(.btn){color:rgba(29,29,31,.8);text-decoration:none;transition:color .2s ease}
+
+/* Botones y enlaces */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.8rem 1.5rem;border-radius:999px;font-weight:600;font-size:1.0625rem;line-height:1.2;text-decoration:none;letter-spacing:-.01em;transition:transform .14s var(--ease-out),background-color .2s ease;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
+.btn-r{background:var(--red);color:#fff}
+.btn-xl{padding:1rem 1.9rem;font-size:1.125rem}
+.btn-w{background:#fff;color:var(--teal-d)}
+header nav .btn{padding:.42rem .95rem;font-size:.8125rem;white-space:nowrap}
+.sm{display:none}
+.more{display:inline-flex;align-items:center;font-size:1.1875rem;font-weight:500;color:var(--teal);text-decoration:none;letter-spacing:-.01em}
+.more::after{content:"\203A";margin-left:.35em;font-size:1.25em;line-height:1;transition:transform .2s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){
+  header nav a:not(.btn):hover{color:#000}
+  .btn-r:hover{background:var(--red-d)}
+  .btn-w:hover{background:var(--mint)}
+  .more:hover{text-decoration:underline}
+  .more:hover::after{transform:translateX(3px)}
+}
+
+/* Hero */
+.hero{background:#fff;text-align:center;padding:clamp(3rem,7vw,5.5rem) 0 clamp(3rem,6vw,5rem);overflow:hidden}
+.tag{display:inline-block;font-size:1.0625rem;font-weight:600;color:var(--red);margin-bottom:1rem;letter-spacing:-.01em}
+h1{font-size:clamp(2.5rem,7vw,5.5rem);line-height:1.03;font-weight:700;letter-spacing:-.04em;color:var(--ink);max-width:14em;margin:0 auto}
+h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{text-wrap:balance;max-width:42rem;margin:1.5rem auto 0;font-size:clamp(1.15rem,1.2vw + .9rem,1.5rem);line-height:1.38;color:var(--gray)}
+.cta{display:flex;flex-wrap:wrap;gap:1rem 1.9rem;justify-content:center;align-items:center;margin-top:2.1rem}
+.facts{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.7rem;margin:2.2rem 0 0;padding:0;list-style:none;font-size:.9375rem;font-weight:500;color:var(--gray)}
+.facts li{display:inline-flex;align-items:center;gap:.5rem}
+.facts li::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:var(--green)}
+.stage{display:grid;grid-template-columns:1.25fr .75fr;gap:1.25rem;margin-top:clamp(3rem,6vw,4.5rem);text-align:left}
+.tile{position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.art{min-height:clamp(26rem,50vw,39rem)}
+.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 56%}
+.devwrap{display:grid;place-items:center;padding:2.5rem 1.5rem;background:radial-gradient(70% 45% at 50% 0%,#cfeee0,transparent 72%),linear-gradient(180deg,var(--mint),#fff)}
+.phone{position:relative;width:min(15.5rem,100%);aspect-ratio:9/18.4;padding:.5rem;border-radius:2.6rem;background:#0b0b0d;box-shadow:inset 0 0 0 2px #3a3a3c,0 32px 60px rgba(11,29,33,.28)}
+.phone::before{content:"";position:absolute;z-index:2;top:.95rem;left:50%;width:28%;height:1.05rem;margin-left:-14%;border-radius:99px;background:#000}
+
+/* Ficha de ejemplo (mismo diseño que la ficha real) */
+.card{display:flex;flex-direction:column;height:100%;background:#fff;border-radius:2.15rem;overflow:hidden;font-size:.9375rem;color:#111}
+.card h2{margin:0;padding:2.7rem .9rem .75rem;background:#111;color:#fff;font-size:.8125rem;font-weight:600;letter-spacing:.01em}
+.card div{flex:1;display:flex;flex-direction:column;justify-content:center;padding:.5rem .9rem;border-top:1px solid #e3e3e3;line-height:1.3}
+.card small{display:block;color:#666;font-size:.75rem}
+.card strong{font-size:1.0625rem;letter-spacing:-.01em}
+.card .al{background:var(--redbg);border-top:0}
+.card .al small{color:var(--red)}
+.card .tel{background:var(--ok);color:#fff;font-weight:700;font-size:.9375rem}
+.card .tel small{color:#d6f0de}
+
+/* Secciones */
+.sec{padding:clamp(4.5rem,10vw,8rem) 0}
+.gray{background:var(--bg2)}
+.gray .tile{background:#fff}
+.head{max-width:54rem;margin:0 auto clamp(2.5rem,6vw,4rem);text-align:center}
+.sec h2.t{font-size:clamp(2.1rem,5.2vw,3.75rem);line-height:1.07;font-weight:700;letter-spacing:-.035em;color:var(--ink)}
+.sub{text-wrap:balance;max-width:42rem;margin:1rem auto 0;font-size:clamp(1.1rem,1vw + .95rem,1.5rem);line-height:1.38;color:var(--gray)}
+.night{background:var(--night);color:#f5f5f7}
+.night h2.t{color:#f5f5f7}
+.night .sub{color:#a1a1a6}
+
+/* Cómo funciona */
+.how{display:grid;grid-template-columns:.85fr 1.15fr;gap:1.25rem;align-items:stretch}
+.how .ph-tile{min-height:30rem}
+.how .ph-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 62%}
+.steps{list-style:none;margin:0;padding:clamp(1.5rem,3.5vw,2.75rem);display:flex;flex-direction:column;justify-content:center}
+.steps li{display:grid;grid-template-columns:3.6rem 1fr;gap:1rem;align-items:start;padding:1.5rem 0;border-top:1px solid var(--line)}
+.steps li:first-child{border-top:0;padding-top:0}
+.steps li:last-child{padding-bottom:0}
+.steps b{font-size:2.9rem;line-height:1;font-weight:700;letter-spacing:-.04em;background:linear-gradient(135deg,var(--teal),#3aa07f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.steps h3{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:.3rem}
+.steps p{margin:0;color:var(--gray)}
+
+/* ¿Por qué REFUA? */
+.why{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.why article{position:relative;overflow:hidden;border-radius:var(--r);padding:clamp(2.5rem,5vw,4rem) clamp(1.5rem,4vw,3.25rem) clamp(2rem,4vw,3rem);min-height:26rem;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center}
+.why .lbl{font-size:1rem;font-weight:600;letter-spacing:-.005em;margin-bottom:.9rem}
+.why h3{font-size:clamp(1.9rem,3.4vw,2.75rem);line-height:1.08;font-weight:700;letter-spacing:-.03em;color:#fff;max-width:14em}
+.why p{max-width:26rem;margin:1rem 0 1.6rem;font-size:1.25rem;line-height:1.4;color:#c7c7cc}
+.pb{background:radial-gradient(75% 60% at 50% 115%,rgba(196,23,12,.55),transparent 70%),#1b1212}
+.pb .lbl{color:#ff9a8e}
+.sl{background:radial-gradient(75% 60% at 50% 115%,rgba(96,192,152,.42),transparent 70%),#10282c}
+.sl .lbl{color:#8fdcb2}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{padding:.42rem .9rem;border-radius:999px;font-size:.9375rem;font-weight:600;background:var(--bg2);color:var(--teal)}
+.why .chips li{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff}
+
+/* Productos */
+.prods{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.prod{display:flex;flex-direction:column}
+.prod .tx{order:-1;padding:clamp(2rem,4vw,3rem) 2rem 1.5rem;text-align:center}
+.prod h3{font-size:clamp(1.65rem,2.4vw + .6rem,2.25rem);line-height:1.1;font-weight:700;letter-spacing:-.03em;margin-bottom:.55rem}
+.prod p{margin:0 auto;max-width:26rem;color:var(--gray)}
+.prod .ph{position:relative;flex:1;min-height:22rem}
+.prod .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.prod .ph.sk img{object-fit:contain;padding:1.5rem 2rem 2rem;mix-blend-mode:multiply}
+.moto{margin-top:1.25rem;display:grid;grid-template-columns:1fr 1fr;background:var(--night);color:#fff}
+.moto .tx{order:-1;align-self:center;padding:clamp(2rem,5vw,4rem)}
+.moto h3{font-size:clamp(1.75rem,3vw + .5rem,2.6rem);line-height:1.08;font-weight:700;letter-spacing:-.03em;margin-bottom:1rem}
+.moto p{margin:0 0 .8rem;font-size:1.1875rem;line-height:1.4;color:#c7c7cc}
+.moto img{width:100%;height:100%;min-height:22rem;object-fit:cover;object-position:50% 40%}
+
+/* Señal débil */
+.stats{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:1rem 2rem;text-align:center}
+.stat+.stat{border-left:1px solid rgba(255,255,255,.14)}
+.stat b{display:block;white-space:nowrap;font-size:clamp(2.6rem,4.8vw,4.25rem);line-height:1;font-weight:700;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin-bottom:.8rem;background:linear-gradient(135deg,#8be0d6,#8fdcb2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat p{max-width:17rem;margin:0 auto;font-size:1.0625rem;color:#c7c7cc}
+
+/* Momentos y personas */
+.moments{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.mm{padding:2.75rem 2rem 2.5rem;text-align:center;display:flex;flex-direction:column;align-items:center}
+.mm .ic{margin-bottom:1.3rem;color:var(--teal)}
+.mm .ic svg{width:3rem;height:3rem;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mm h3{font-size:1.5rem;line-height:1.15;font-weight:700;letter-spacing:-.025em;margin-bottom:.6rem}
+.mm p{margin:0 0 1.4rem;color:var(--gray)}
+.mm .chips{margin-top:auto}
+
+/* Para quién */
+.who{display:grid;grid-template-columns:repeat(3,1fr);gap:2.75rem 2.25rem}
+.who div{border-top:1px solid var(--line);padding-top:1.2rem}
+.who h3{font-size:1.3125rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.35rem}
+.who p{margin:0;color:var(--gray)}
+
+/* Cierre */
+.end{background:var(--bg2);text-align:center;padding:clamp(5rem,10vw,8rem) 0}
+.end h2{font-size:clamp(2.1rem,5.2vw,3.75rem);line-height:1.07;font-weight:700;letter-spacing:-.035em;max-width:14em;margin:0 auto}
+.end p{margin:1rem auto 2rem;max-width:30em;font-size:clamp(1.1rem,1vw + .95rem,1.5rem);line-height:1.38;color:var(--gray)}
+
+/* Sección comercial */
+.biz{background:radial-gradient(60% 50% at 50% 0%,rgba(96,192,152,.28),transparent 70%),linear-gradient(180deg,#0f2b31,#143a40);color:#fff}
+.biz h2.t{color:#fff}
+.biz .sub{color:#c9dfdc}
+.bizg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.bizg article{border-radius:var(--r);padding:2.25rem 2rem 2.5rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16)}
+.bizg h3{font-size:1.5rem;line-height:1.15;font-weight:700;letter-spacing:-.025em;margin-bottom:.6rem}
+.bizg p{margin:0;color:#d4e8e5}
+.bizg .hi{background:#fff;border-color:#fff;color:var(--ink)}
+.bizg .hi p{color:var(--gray)}
+.bizg .hi b{display:block;font-size:clamp(3rem,5vw,4rem);line-height:1;font-weight:700;letter-spacing:-.045em;margin-bottom:.7rem;background:linear-gradient(135deg,var(--teal),#3aa07f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bizcta{margin-top:3rem;text-align:center}
+
+/* Pie de página */
+footer{background:var(--bg2);border-top:1px solid var(--line);color:var(--gray);font-size:.75rem;line-height:1.5;padding:2.75rem 0 3rem}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:2rem 3rem;align-items:start}
+.fbrand p{margin:1rem 0 0;max-width:34rem}
+footer .brand img:first-child{width:1.9rem}
+footer .brand img:last-child{width:5rem}
+.flinks,.fcontact{display:flex;flex-direction:column;font-style:normal}
+.flinks a,.fcontact a{display:flex;align-items:center;width:fit-content;min-height:2.5rem;font-size:.8125rem;color:#424245;text-decoration:none}
+@media (hover:hover) and (pointer:fine){.flinks a:hover,.fcontact a:hover{color:#000;text-decoration:underline}}
+
+@media(max-width:860px){
+  header nav a:not(.btn){display:none}
+  .stage,.how,.why,.prods,.moto,.moments,.who,.bizg,.fgrid,.stats{grid-template-columns:1fr}
+  .art{min-height:26rem}
+  .how .ph-tile{min-height:22rem}
+  .why article{min-height:22rem}
+  .moto img{min-height:18rem}
+  .stat+.stat{border-left:0;border-top:1px solid rgba(255,255,255,.14);margin-top:1rem;padding-top:2rem}
+  .who{gap:2rem}
+  .fgrid{gap:1.25rem}
+}
+@media(max-width:400px){h1{font-size:2.05rem;letter-spacing:-.035em}.sec h2.t,.end h2{font-size:1.85rem}.stat b{font-size:2.5rem}}
+@media(max-width:340px){h1{font-size:1.75rem}.sec h2.t,.end h2{font-size:1.6rem}.stat b{font-size:2.2rem}}
+@media(max-width:520px){
+  .lg{display:none}.sm{display:inline}
+  .brand img:last-child{width:5rem}
+  .cta{flex-direction:column;gap:1.1rem}
+  .btn-xl{width:100%;font-size:1rem;padding:.95rem 1rem;gap:.3rem}
+  .bizcta .btn{width:100%}
+  .steps li{grid-template-columns:2.6rem 1fr;gap:.75rem}
+  .steps b{font-size:2.3rem}
+}
+
+/* Accesibilidad */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js [data-r]{transform:none;transition:opacity .25s ease;transition-delay:0s}
+  .btn,.btn:active{transition:none;transform:none}
+  .more::after{transition:none}
+}
+@media(prefers-reduced-transparency:reduce){header{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media(prefers-contrast:more){:root{--gray:#3d3d40;--line:rgba(0,0,0,.4)}.night .sub,.why p,.moto p,.stat p{color:#fff}}
+@media print{.js [data-r]{opacity:1;transform:none}header{position:static}}
+</style></head>
+<body>
+
+<header><div class="w">
+  <a class="brand" href="/" aria-label="REFUA, inicio">
+    <img src="/assets/logo-icon.png" width="207" height="220" alt="">
+    <img src="/assets/logo-wordmark.png" width="420" height="87" alt="REFUA">
+  </a>
+  <nav>
+    <a href="#como">Cómo funciona</a>
+    <a href="#productos">Productos</a>
+    <a href="#quien">Para quién</a>
+    <a href="#instituciones">Instituciones</a>
+    <a class="btn btn-r" href="/?id=REF-00001"><span class="lg">Probar la experiencia en vivo</span><span class="sm">Probar en vivo</span></a>
+  </nav>
+</div></header>
+
+<main>
+<section class="hero">
+  <div class="w">
+    <span class="tag" data-r>Protección real y accesible para todos</span>
+    <h1 data-r style="--i:1">En una emergencia, el desconocimiento <em>cuesta vidas.</em></h1>
+    <p class="lead" data-r style="--i:2">Si hoy sufres un accidente o te desmayas en la calle, los paramédicos no saben si eres diabético, alérgico o a quién llamar. REFUA pone tu información médica crítica y contactos de emergencia en una pulsera o sticker inteligente que puedes escanear en un segundo.</p>
+    <div class="cta" data-r style="--i:3">
+      <a class="btn btn-r btn-xl" href="/?id=REF-00001">Probar la experiencia en vivo <span aria-hidden="true">→</span></a>
+      <a class="more" href="#productos">Conoce más sobre REFUA</a>
+    </div>
+    <ul class="facts" data-r style="--i:4"><li>QR y NFC</li><li>Sin app ni registro</li><li>Optimizada para 2G/3G</li></ul>
+  </div>
+  <div class="w stage">
+    <div class="tile art" data-r>
+      <img src="/assets/hero-primeros-auxilios.webp" width="640" height="1146" alt="Un primer respondiente atiende a una persona en el suelo mientras escanea su pulsera con el teléfono" fetchpriority="high" decoding="async">
+    </div>
+    <div class="tile devwrap" data-r style="--i:1">
+      <div class="phone">
+        <div class="card" aria-label="Ejemplo de ficha de emergencia">
+          <h2>Ficha de emergencia</h2>
+          <div class="al"><small>Alergias</small><strong>Penicilina, látex</strong></div>
+          <div><small>Patologías de base</small><strong>Diabetes tipo 2, hipertensión</strong></div>
+          <div class="tel">Llamar: María (hija)<small>+58 412 000 0000</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec gray" id="como"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Cuando cada segundo cuenta, la persona no puede explicarse.</h2>
+    <p class="sub" data-r style="--i:1">Un paciente inconsciente no puede decir a qué es alérgico ni qué medicamentos toma. REFUA lo dice por él.</p>
+  </div>
+  <div class="how">
+    <div class="tile ph-tile" data-r>
+      <img src="/assets/escena-accidente.webp" width="560" height="1213" loading="lazy" decoding="async" alt="Un rescatista atiende a un motociclista accidentado y consulta la ficha REFUA en un teléfono">
+    </div>
+    <ol class="tile steps" data-r style="--i:1">
+      <li><b>1</b><div><h3>Se vincula el identificador</h3><p>La ficha médica de la persona se asocia a su pulsera, tarjeta o sticker desde el panel de administración.</p></div></li>
+      <li><b>2</b><div><h3>El rescatista escanea</h3><p>Con la cámara del teléfono (QR) o acercándolo (NFC). No necesita instalar nada ni iniciar sesión.</p></div></li>
+      <li><b>3</b><div><h3>Ve lo esencial y llama</h3><p>Grupo sanguíneo, alergias, patologías y medicación, con botones para llamar a los contactos de emergencia.</p></div></li>
+    </ol>
+  </div>
+</div></section>
+
+<section class="sec night" id="porque"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>¿Por qué REFUA?</h2>
+    <p class="sub" data-r style="--i:1">Porque en una emergencia no hay tiempo para adivinar.</p>
+  </div>
+  <div class="why">
+    <article class="pb" data-r>
+      <span class="lbl">El problema</span>
+      <h3>Minutos perdidos en la «hora dorada»</h3>
+      <p>Tratando de identificar a un paciente inconsciente o adivinando qué medicamento no administrarle.</p>
+      <ul class="chips"><li>¿Es diabético?</li><li>¿Es alérgico?</li><li>¿A quién llamo?</li></ul>
+    </article>
+    <article class="sl" data-r style="--i:1">
+      <span class="lbl">La solución REFUA</span>
+      <h3>Cero incertidumbre</h3>
+      <p>Escaneo instantáneo desde un teléfono, sin aplicaciones ni registros.</p>
+      <ul class="chips"><li>Alergias</li><li>Patologías y medicación</li><li>Contactos de emergencia</li></ul>
+    </article>
+  </div>
+</div></section>
+
+<section class="sec" id="productos"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Un identificador para cada persona y cada situación.</h2>
+    <p class="sub" data-r style="--i:1">Todos llevan el mismo código QR y chip NFC, y abren la misma ficha de emergencia.</p>
+  </div>
+  <div class="prods">
+    <article class="tile prod" data-r>
+      <div class="ph"><img src="/assets/pulsera.webp" width="640" height="603" loading="lazy" decoding="async" alt="Pulsera negra con el logo de REFUA y un código QR en la muñeca"></div>
+      <div class="tx"><h3>Pulsera</h3><p>Con el logo de REFUA y el código QR a la vista, siempre en la muñeca. Para uso diario, deporte o trabajo.</p></div>
+    </article>
+    <article class="tile prod" data-r style="--i:1">
+      <div class="ph sk"><img src="/assets/sticker.webp" width="520" height="463" loading="lazy" decoding="async" alt="Sticker triangular rojo de REFUA con código QR, chip NFC y grupo sanguíneo O+"></div>
+      <div class="tx"><h3>Sticker de emergencia</h3><p>Triángulo rojo con QR, NFC y el grupo sanguíneo a la vista, fácil de reconocer a distancia.</p></div>
+    </article>
+  </div>
+  <div class="tile moto" data-r>
+    <img src="/assets/sticker-en-uso.webp" width="560" height="795" loading="lazy" decoding="async" alt="Un teléfono escanea el sticker de REFUA pegado en un casco de moto">
+    <div class="tx">
+      <h3>Pensado también para motociclistas y conductores.</h3>
+      <p>Pegado en el casco o en el vehículo, el sticker permite a quien llega primero al lugar acceder a la ficha sin tener que buscar documentos.</p>
+      <p>También se puede vincular la ficha a una tarjeta, para la cartera o la billetera.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec night" id="senal"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Hecha para la señal que haya.</h2>
+    <p class="sub" data-r style="--i:1">La ficha de emergencia es una sola página de texto, sin imágenes, fuentes externas ni librerías. Pide a la base de datos solo los campos que muestra.</p>
+  </div>
+  <div class="stats">
+    <div class="stat" data-r><b>~4 KB</b><p>Pesa lo que pesa una línea de texto: carga rápido incluso con conexión lenta.</p></div>
+    <div class="stat" data-r style="--i:1"><b>2G / 3G</b><p>Diseñada para abrir con señal básica, con un botón para reintentar si la red falla.</p></div>
+    <div class="stat" data-r style="--i:2"><b>0 apps</b><p>Se abre desde el navegador del teléfono: sin instalar nada y sin iniciar sesión.</p></div>
+  </div>
+</div></section>
+
+<section class="sec gray" id="momentos"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Diseñado para cada momento y persona.</h2>
+    <p class="sub" data-r style="--i:1">Desde el entrenamiento de cada día hasta la crisis que nadie espera.</p>
+  </div>
+  <div class="moments">
+    <article class="tile mm" data-r>
+      <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="17" r="3.5"/><circle cx="18.5" cy="17" r="3.5"/><path d="M5.5 17l4-8h5l4 8M9.5 9h-2.5M14.5 9l-2 8"/></svg></div>
+      <h3>Para la vida diaria y deportes</h3>
+      <p>Información siempre contigo, donde más expuesto estás a un accidente.</p>
+      <ul class="chips"><li>Runners</li><li>Ciclistas</li><li>Motociclistas</li><li>Niños</li><li>Adultos mayores</li></ul>
+    </article>
+    <article class="tile mm" data-r style="--i:1">
+      <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.3A5.4 5.4 0 0112 6.2a5.4 5.4 0 019.5 5.5C19.5 16.4 12 21 12 21z"/><path d="M12 9.5v5M9.5 12h5"/></svg></div>
+      <h3>Para condiciones médicas especiales</h3>
+      <p>Le da voz a quien no puede hablar en una crisis.</p>
+      <ul class="chips"><li>Diabetes</li><li>Hipertensión</li><li>Alergias severas</li><li>Autismo</li><li>Alzheimer</li><li>Marcapasos</li></ul>
+    </article>
+    <article class="tile mm" data-r style="--i:2">
+      <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M14 6a6 6 0 0 1 6 6v3"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><rect x="2" y="15" width="20" height="4" rx="1"/></svg></div>
+      <h3>Para seguridad laboral</h3>
+      <p>Stickers reflectivos para cascos en industrias, obras y transporte.</p>
+      <ul class="chips"><li>Industria</li><li>Obras</li><li>Transporte</li></ul>
+    </article>
+  </div>
+</div></section>
+
+<section class="sec" id="quien"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Para quienes responden y para quienes necesitan respuesta.</h2>
+    <p class="sub" data-r style="--i:1">Pensado para acelerar la atención prehospitalaria y las primeras decisiones en urgencias.</p>
+  </div>
+  <div class="who">
+    <div data-r><h3>Paramédicos y ambulancias</h3><p>Datos críticos antes de iniciar el traslado.</p></div>
+    <div data-r style="--i:1"><h3>Bomberos y protección civil</h3><p>Información al instante en el lugar del incidente.</p></div>
+    <div data-r style="--i:2"><h3>Primeros auxilios</h3><p>Orientación para quien llega primero y no es profesional de salud.</p></div>
+    <div data-r><h3>Personal médico</h3><p>Antecedentes esenciales al ingreso en emergencias y urgencias.</p></div>
+    <div data-r style="--i:1"><h3>Pacientes y familias</h3><p>Los contactos de emergencia, a una llamada.</p></div>
+    <div data-r style="--i:2"><h3>Aseguradoras y entes públicos</h3><p>Convenios para ofrecer REFUA a sus afiliados o ciudadanos.</p></div>
+  </div>
+</div></section>
+
+<section class="end"><div class="w">
+  <h2 data-r>Mira cómo se ve una ficha real.</h2>
+  <p data-r style="--i:1">Abre el ejemplo en tu teléfono y comprueba lo rápido que carga.</p>
+  <a class="btn btn-r btn-xl" data-r style="--i:2" href="/?id=REF-00001">Probar la experiencia en vivo <span aria-hidden="true">→</span></a>
+</div></section>
+
+<section class="sec biz" id="instituciones"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Lleva REFUA a tu institución o empresa.</h2>
+    <p class="sub" data-r style="--i:1">Para clínicas, hospitales, empresas e inversionistas que quieren proteger a más personas.</p>
+  </div>
+  <div class="bizg">
+    <article data-r>
+      <h3>Para clínicas y hospitales</h3>
+      <p>Brazaletes desechables e higiénicos para áreas de triaje y admisión, pensados para integrarse con el sistema de historias clínicas del centro de salud.</p>
+    </article>
+    <article data-r style="--i:1">
+      <h3>Para empresas</h3>
+      <p>Protección del personal de riesgo (SSTA) y prevención de accidentes laborales.</p>
+    </article>
+    <article class="hi" data-r style="--i:2">
+      <b>&lt; $5</b>
+      <h3>Modelo de alto impacto masivo</h3>
+      <p>Un producto de adopción universal por debajo de los $5, diseñado sin barreras económicas para proteger a millones.</p>
+    </article>
+  </div>
+  <div class="bizcta" data-r>
+    <a class="btn btn-w btn-xl" href="mailto:contacto@refua.com.ve?subject=REFUA%20-%20Instituciones%20e%20Inversiones">Hablar con el equipo de REFUA / Inversiones</a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="w fgrid">
+  <div class="fbrand">
+    <a class="brand" href="/" aria-label="REFUA, inicio">
+      <img src="/assets/logo-icon.png" width="207" height="220" alt="" loading="lazy">
+      <img src="/assets/logo-wordmark.png" width="420" height="87" alt="REFUA" loading="lazy">
+    </a>
+    <p>REFUA · Proyecto en fase temprana de desarrollo. La información de las fichas es declarada por cada paciente y no sustituye la evaluación médica.</p>
+  </div>
+  <nav class="flinks" aria-label="Legal">
+    <a href="/terminos.html">Términos y condiciones</a>
+    <a href="/privacidad.html">Política de privacidad</a>
+    <a href="/consentimiento.html">Consentimiento informado</a>
+  </nav>
+  <address class="fcontact">
+    <a href="mailto:contacto@refua.com.ve">contacto@refua.com.ve</a>
+    <a href="https://www.instagram.com/refua.ve" target="_blank" rel="noopener noreferrer">Instagram @refua.ve</a>
+    <a href="https://www.tiktok.com/@refua.ve" target="_blank" rel="noopener noreferrer">TikTok @refua.ve</a>
+  </address>
+</div></footer>
+
+<script>
+(function(){
+  var els=document.querySelectorAll("[data-r]");
+  if(!("IntersectionObserver"in window))return;
+  try{
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.setAttribute("data-v","");io.unobserve(e.target)}})
+    },{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+    els.forEach(function(el){io.observe(el)});
+  }catch(err){document.documentElement.classList.remove("js")}
+})();
+</script>
+</body></html>
