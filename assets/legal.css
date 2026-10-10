@@ -1,0 +1,29 @@
+:root{--t900:#1c4a53;--t700:#2c6670;--m100:#e6f6f3;--ink:#16343c;--mute:#4f6b72;--line:#d6e5e3}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--t700)}
+header.top{border-bottom:1px solid var(--line)}
+header.top .in{max-width:820px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img:first-child{width:34px;height:auto}.brand img:last-child{width:92px;height:auto}
+.back{color:var(--t700);font-weight:700;text-decoration:none;font-size:15px}
+main{max-width:820px;margin:0 auto;padding:30px 20px 60px}
+.draft{background:#fff4d6;border:1px solid #f0d27a;color:#6b4e00;padding:12px 16px;border-radius:12px;font-size:14.5px;margin-bottom:24px}
+h1{font-size:clamp(28px,5vw,38px);line-height:1.15;color:var(--t900);margin:0 0 6px;letter-spacing:-.02em}
+.meta{color:var(--mute);font-size:14px;margin:0 0 26px}
+h2{font-size:21px;line-height:1.25;color:var(--t900);margin:34px 0 8px}
+p,li{margin:0 0 12px}
+ul,ol{padding-left:22px;margin:0 0 14px}
+mark{background:#fff0a8;padding:0 3px;border-radius:3px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin:10px 0 18px}
+th,td{text-align:left;padding:9px 11px;border:1px solid var(--line);vertical-align:top}
+th{background:var(--m100);color:var(--t900)}
+.box{background:var(--m100);border:1px solid #cdeee8;border-radius:14px;padding:16px 18px;margin:18px 0}
+.warn{background:#fde8e6;border:1px solid #f3c4be;border-radius:14px;padding:16px 18px;margin:18px 0}
+.box p:last-child,.warn p:last-child{margin-bottom:0}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:34px 26px;margin-top:40px}
+.sign div{border-top:1.5px solid var(--ink);padding-top:6px;font-size:14px}
+footer.lf{border-top:1px solid var(--line);padding:22px 20px;text-align:center;font-size:14px;color:var(--mute)}
+footer.lf a{margin:0 8px}
+@media(max-width:600px){.sign{grid-template-columns:1fr}table{font-size:14px}th,td{padding:7px 8px}}
+@media print{.top,.draft,footer.lf,.noprint{display:none}main{padding:0}body{font-size:12pt}}
