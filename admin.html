@@ -85,10 +85,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
 .est select{padding-left:32px}
 
 /* Contactos */
+.chk{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1.5px solid #c9d9d7;border-radius:12px;background:#fcfefd;margin:0 0 10px;font-weight:500;font-size:14.5px;color:var(--ink);cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:#2c6670}
+.chk.dis{background:var(--okbg);border-color:#b8e0c5}
 .contact{padding:16px 16px 4px;border:1.5px dashed #c9d9d7;border-radius:14px;margin-bottom:16px;background:#fcfefd}
 .contact h3{margin:0 0 12px;font-size:14px;color:var(--t700)}
 
 /* Enlace de la ficha */
+.lote summary{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--m50);cursor:pointer;list-style:none}
+.lote summary::-webkit-details-marker{display:none}
+.lote summary b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--grad);color:#fff;font-size:18px;flex:none;line-height:1}
+.lote summary h2{margin:0;font-size:16px;color:var(--t900)}
+.lote[open] summary{border-bottom:1px solid var(--line)}
+.lote[open] summary b{transform:rotate(45deg)}
+.lote .body .btn{width:100%;margin:2px 0 6px}
 .link{background:var(--m100);border:1px solid var(--m200);border-radius:18px;padding:18px 22px;margin-bottom:18px}
 .link h3{margin:0 0 8px;font-size:15px;color:var(--t900)}
 .link code{display:block;padding:10px 12px;background:#fff;border:1px solid var(--m200);border-radius:10px;font:600 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;color:var(--t700)}
@@ -160,15 +170,35 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
 
     <div class="finder">
       <h1>Ficha del paciente</h1>
-      <p>Escribe el código del sticker o pulsera. Si ya existe se carga para editarlo; si no, se crea una ficha nueva.</p>
+      <p>Escribe el código del sticker o pulsera. Si ya existe se carga para editarlo; si no, se crea una ficha nueva. Para fichas reales usa «Generar código»: crea un código aleatorio que nadie puede adivinar.</p>
       <div class="find-row">
         <input type="text" id="search-id" placeholder="REF-00001" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Código del dispositivo">
         <button class="btn btn-p" type="button" onclick="buscarPaciente()">Cargar / Buscar</button>
+        <button class="btn btn-o" type="button" onclick="generarCodigo()" title="Crea un código aleatorio difícil de adivinar">Generar código</button>
       </div>
       <span class="chip" id="modo">Sin código cargado</span>
     </div>
 
     <div class="link" id="linkbox" hidden></div>
+
+    <details class="panel lote" id="lote">
+      <summary><b>+</b><h2>Lote para fábrica (CSV)</h2></summary>
+      <div class="body">
+        <p class="hint" style="margin:0 0 14px">Genera códigos aleatorios para fabricar pulseras y stickers. Se guardan en la base de datos como «inactivo» (no muestran nada hasta que los actives) y se descarga un archivo CSV con el código y el enlace de cada uno, para enviarlo a la fábrica.</p>
+        <div class="g2">
+          <div class="f">
+            <label for="lote_n">Cantidad (1 a 5000)</label>
+            <input type="number" id="lote_n" min="1" max="5000" value="100" inputmode="numeric">
+          </div>
+          <div class="f">
+            <label for="lote_tag">Nombre del lote</label>
+            <input type="text" id="lote_tag" maxlength="30" placeholder="Ej: stickers-casco-01" autocomplete="off">
+          </div>
+        </div>
+        <button class="btn btn-p" type="button" id="btn-lote" onclick="generarLote()">Generar lote y descargar CSV</button>
+        <p class="hint" id="lote-info">Guarda el archivo en un lugar seguro y envíalo solo a la fábrica, con un acuerdo de confidencialidad: quien tenga la lista conoce los enlaces de ese lote.</p>
+      </div>
+    </details>
 
     <form id="patient-form" onsubmit="guardarPaciente(event)">
 
@@ -278,6 +308,24 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
         </div>
       </div>
 
+      <div class="panel">
+        <header><b>5</b><h2>Consentimiento</h2></header>
+        <div class="body">
+          <div class="f">
+            <label for="consent_tipo">Quién otorga el consentimiento</label>
+            <select id="consent_tipo">
+              <option value="titular">El propio titular (mayor de edad)</option>
+              <option value="representante_legal">Representante legal (menor de edad o persona bajo representación)</option>
+            </select>
+          </div>
+          <label class="chk" id="consent-box">
+            <input type="checkbox" id="consent_ok">
+            <span>Confirmo que se explicó y se aceptó el <a href="/consentimiento.html" target="_blank" rel="noopener">consentimiento informado</a> y la <a href="/privacidad.html" target="_blank" rel="noopener">política de privacidad</a>, incluido que la ficha es visible para cualquier persona que escanee el código, y que los contactos de emergencia fueron informados.</span>
+          </label>
+          <p class="hint" id="consent-info">Obligatorio para activar una ficha. Se guarda la fecha, la versión del texto y quién lo registró. Para retirar el consentimiento, cambia el estado a «Bloqueado».</p>
+        </div>
+      </div>
+
       <div class="bar"><div class="in">
         <button class="btn btn-o" type="button" onclick="limpiarFormulario()">Limpiar</button>
         <button class="btn btn-ok" id="btn-save" type="submit">💾 Guardar ficha</button>
@@ -296,7 +344,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const $ = id => document.getElementById(id);
+    const CONSENT_VERSION = '2026-10'; // debe coincidir con la versión de los textos legales
     let idCargado = null; // código cuya ficha está cargada en el formulario
+    let consentPrev = null; // consentimiento ya registrado de la ficha cargada
     let toastT = null;
 
     function mostrarApp(email) {
@@ -333,6 +383,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
             mostrarApp((data && data.user && data.user.email) || email);
         }
     }
+
+    function val0(k) { return $(k).value.trim(); }
 
     function idActual() {
         return $('search-id').value.trim().toUpperCase();
@@ -402,12 +454,93 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
         b.hidden = false;
     }
 
+    function pintarConsentimiento() {
+        const ok = $('consent_ok'), box = $('consent-box'), info = $('consent-info');
+        if (consentPrev && consentPrev.fecha) {
+            ok.checked = true; ok.disabled = true; box.classList.add('dis');
+            $('consent_tipo').value = consentPrev.tipo || 'titular';
+            const f = new Date(consentPrev.fecha).toLocaleDateString('es-VE');
+            info.textContent = 'Consentimiento registrado el ' + f + ' (versión ' + (consentPrev.version || '?') + ')' +
+                (consentPrev.por ? ' por ' + consentPrev.por : '') + '. Para retirarlo, cambia el estado a «Bloqueado».';
+        } else {
+            ok.checked = false; ok.disabled = false; box.classList.remove('dis');
+            info.textContent = 'Obligatorio para activar una ficha. Se guarda la fecha, la versión del texto y quién lo registró. Para retirar el consentimiento, cambia el estado a «Bloqueado».';
+        }
+    }
+
+    function codigoAleatorio() {
+        // 16 caracteres sin ambiguos (sin 0/O, 1/I/L): 31^16 = unos 7 x 10^23 combinaciones, en 4 grupos de 4
+        const abc = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+        const b = new Uint32Array(16);
+        crypto.getRandomValues(b);
+        const t = Array.from(b, n => abc[n % abc.length]).join('');
+        return 'REF-' + t.match(/.{4}/g).join('-');
+    }
+
+    function descargarCsv(codes, etiqueta) {
+        const base = 'https://refua.com.ve/?id=';
+        const lineas = ['numero,codigo,url'].concat(codes.map((c, i) => (i + 1) + ',' + c + ',' + base + c));
+        const blob = new Blob(['\ufeff' + lineas.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'refua-lote-' + etiqueta + '-' + new Date().toISOString().slice(0, 10) + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }
+
+    async function generarLote() {
+        const n = parseInt($('lote_n').value, 10);
+        if (!(n >= 1 && n <= 5000)) return mostrarMensaje('La cantidad debe estar entre 1 y 5000.', 'error');
+        const etiqueta = $('lote_tag').value.trim().toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '') || 'lote';
+        if (!confirm('Se crearán ' + n + ' códigos nuevos como «inactivo» en la base de datos. ¿Continuar?')) return;
+
+        const btn = $('btn-lote');
+        btn.disabled = true; btn.textContent = 'Generando…';
+        const guardados = [];
+        try {
+            const unicos = new Set();
+            while (unicos.size < n) unicos.add(codigoAleatorio());
+            const codes = Array.from(unicos);
+            for (let i = 0; i < codes.length; i += 500) {
+                const trozo = codes.slice(i, i + 500);
+                const { error } = await _supabase.from('pacientes').insert(trozo.map(c => ({ id_codigo: c, estado: 'inactivo' })));
+                if (error) throw new Error(error.message);
+                guardados.push(...trozo);
+            }
+            descargarCsv(codes, etiqueta);
+            $('lote-info').textContent = n + ' códigos creados como inactivos y archivo descargado. Guárdalo en un lugar seguro.';
+            mostrarMensaje('✅ Lote de ' + n + ' códigos creado.', 'success');
+        } catch (e) {
+            if (guardados.length) descargarCsv(guardados, etiqueta + '-parcial');
+            mostrarMensaje('No se pudo completar el lote: ' + e.message + (guardados.length ? ' Se guardaron y descargaron ' + guardados.length + ' códigos.' : ''), 'error');
+        }
+        btn.disabled = false; btn.textContent = 'Generar lote y descargar CSV';
+    }
+
+    async function generarCodigo() {
+        for (let i = 0; i < 5; i++) {
+            const c = codigoAleatorio();
+            const { data, error } = await _supabase.from('pacientes').select('id_codigo').eq('id_codigo', c).maybeSingle();
+            if (error) return mostrarMensaje('Error al generar: ' + error.message, 'error');
+            if (!data) {
+                $('search-id').value = c;
+                await buscarPaciente();
+                return mostrarMensaje('Código generado: ' + c + '. Llena la ficha y guárdala.', 'success');
+            }
+        }
+        mostrarMensaje('No se pudo generar un código libre. Intenta de nuevo.', 'error');
+    }
+
     function limpiarFormulario() {
         $('patient-form').reset();
         $('search-id').value = '';
         idCargado = null;
+        consentPrev = null;
         ocultarEnlace();
         pintarEstado();
+        pintarConsentimiento();
         setModo('Sin código cargado');
         $('search-id').focus();
     }
@@ -432,6 +565,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
         idCargado = id;
         if (data) {
             $('estado').value = data.estado || 'inactivo';
+            if (!data.nombre_completo && (data.estado || 'inactivo') === 'inactivo') $('estado').value = 'activo'; // código precargado de un lote
             $('cliente_tipo').value = data.cliente_tipo || 'publico';
             $('nombre_completo').value = data.nombre_completo || '';
             $('cedula').value = data.cedula || '';
@@ -444,6 +578,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
             $('contacto_2_nombre').value = data.contacto_2_nombre || '';
             $('contacto_2_telefono').value = data.contacto_2_telefono || '';
             pintarEstado();
+            consentPrev = data.consentimiento_fecha ? { fecha: data.consentimiento_fecha, version: data.consentimiento_version, tipo: data.consentimiento_tipo, por: data.consentimiento_registrado_por } : null;
+            pintarConsentimiento();
             setModo('Editando ' + id, 'edit');
             mostrarMensaje('Ficha cargada con éxito.', 'success');
             mostrarEnlace(id, data.estado || 'inactivo');
@@ -451,6 +587,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
             $('patient-form').reset();
             $('estado').value = 'activo'; // código nuevo: listo para activar
             pintarEstado();
+            consentPrev = null;
+            pintarConsentimiento();
             setModo('Ficha nueva · ' + id, 'new');
             mostrarMensaje('Código nuevo. Llena el formulario para registrarlo.', 'success');
         }
@@ -472,6 +610,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
             return mostrarMensaje('Teléfono no válido. Usa formato como 04141234567 o +584141234567.', 'error');
         }
 
+        if (val0('estado') === 'activo' && !consentPrev && !$('consent_ok').checked) {
+            $('consent_ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return mostrarMensaje('Para activar la ficha debes confirmar el consentimiento (sección 5).', 'error');
+        }
+
         const val = k => $(k).value.trim();
         const payload = {
             id_codigo: id,
@@ -489,6 +632,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
             contacto_2_telefono: tel2
         };
 
+        // Consentimiento: solo se escribe cuando es nuevo (o cambia quién lo otorga)
+        if (!consentPrev && $('consent_ok').checked) {
+            const { data: ses } = await _supabase.auth.getSession();
+            payload.consentimiento_fecha = new Date().toISOString();
+            payload.consentimiento_version = CONSENT_VERSION;
+            payload.consentimiento_tipo = val('consent_tipo');
+            payload.consentimiento_registrado_por = (ses && ses.session && ses.session.user.email) || '';
+        } else if (consentPrev && val('consent_tipo') !== (consentPrev.tipo || 'titular')) {
+            payload.consentimiento_tipo = val('consent_tipo');
+        }
+
         const btn = $('btn-save');
         btn.disabled = true; btn.textContent = 'Guardando…';
         // .select() devuelve la fila guardada: si viene vacía, no se guardó nada
@@ -501,6 +655,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--t500);outline:3px sol
             mostrarMensaje('No se guardó nada. Cierra sesión y vuelve a entrar.', 'error');
         } else {
             idCargado = id;
+            const r0 = data[0];
+            consentPrev = r0.consentimiento_fecha ? { fecha: r0.consentimiento_fecha, version: r0.consentimiento_version, tipo: r0.consentimiento_tipo, por: r0.consentimiento_registrado_por } : null;
+            pintarConsentimiento();
             $('contacto_1_telefono').value = tel1;
             $('contacto_2_telefono').value = tel2;
             setModo('Editando ' + id, 'edit');
