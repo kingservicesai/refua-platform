@@ -9,6 +9,7 @@
 <meta property="og:description" content="Alergias, patologías y contactos del paciente en segundos, con un escaneo QR o NFC.">
 <meta property="og:image" content="https://refua.com.ve/assets/og.jpg">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="preload" as="image" href="/assets/video/escaneo-casco.webp" fetchpriority="high">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script>if("IntersectionObserver"in window)document.documentElement.classList.add("js")</script>
 <style>
@@ -72,10 +73,10 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 .facts{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.7rem;margin:2.2rem 0 0;padding:0;list-style:none;font-size:.9375rem;font-weight:500;color:var(--gray)}
 .facts li{display:inline-flex;align-items:center;gap:.5rem}
 .facts li::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:var(--green)}
-.stage{display:grid;grid-template-columns:1.25fr .75fr;gap:1.25rem;margin-top:clamp(3rem,6vw,4.5rem);text-align:left}
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:clamp(3rem,6vw,4.5rem);text-align:left}
 .tile{position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg2)}
-.art{min-height:clamp(26rem,50vw,39rem)}
-.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 56%}
+.art{aspect-ratio:4/5}
+.art video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;background:#000}
 .devwrap{display:grid;place-items:center;padding:2.5rem 1.5rem;background:radial-gradient(70% 45% at 50% 0%,#cfeee0,transparent 72%),linear-gradient(180deg,var(--mint),#fff)}
 .phone{position:relative;width:min(15.5rem,100%);aspect-ratio:9/18.4;padding:.5rem;border-radius:2.6rem;background:#0b0b0d;box-shadow:inset 0 0 0 2px #3a3a3c,0 32px 60px rgba(11,29,33,.28)}
 .phone::before{content:"";position:absolute;z-index:2;top:.95rem;left:50%;width:28%;height:1.05rem;margin-left:-14%;border-radius:99px;background:#000}
@@ -105,7 +106,7 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 /* Cómo funciona */
 .how{display:grid;grid-template-columns:.85fr 1.15fr;gap:1.25rem;align-items:stretch}
 .how .ph-tile{min-height:30rem}
-.how .ph-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 62%}
+.how .ph-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 50%}
 .steps{list-style:none;margin:0;padding:clamp(1.5rem,3.5vw,2.75rem);display:flex;flex-direction:column;justify-content:center}
 .steps li{display:grid;grid-template-columns:3.6rem 1fr;gap:1rem;align-items:start;padding:1.5rem 0;border-top:1px solid var(--line)}
 .steps li:first-child{border-top:0;padding-top:0}
@@ -114,13 +115,21 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 .steps h3{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:.3rem}
 .steps p{margin:0;color:var(--gray)}
 
+/* Videos */
+.vids{display:grid;grid-template-columns:repeat(2,minmax(0,22rem));gap:1.5rem 2rem;justify-content:center}
+.vf{margin:0}
+.vt{aspect-ratio:9/16;background:#000}
+.vt video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.vf figcaption{margin-top:.9rem;text-align:center;color:var(--gray);font-size:.9375rem}
+.foot{text-align:center;color:var(--gray);font-size:.8125rem;margin:2.25rem 0 0}
+
 /* ¿Por qué REFUA? */
 .why{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
 .why article{position:relative;overflow:hidden;border-radius:var(--r);padding:clamp(2.5rem,5vw,4rem) clamp(1.5rem,4vw,3.25rem) clamp(2rem,4vw,3rem);min-height:26rem;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center}
 .why .lbl{font-size:1rem;font-weight:600;letter-spacing:-.005em;margin-bottom:.9rem}
 .why h3{font-size:clamp(1.9rem,3.4vw,2.75rem);line-height:1.08;font-weight:700;letter-spacing:-.03em;color:#fff;max-width:14em}
 .why p{max-width:26rem;margin:1rem 0 1.6rem;font-size:1.25rem;line-height:1.4;color:#c7c7cc}
-.pb{background:radial-gradient(75% 60% at 50% 115%,rgba(196,23,12,.55),transparent 70%),#1b1212}
+.pb{background:radial-gradient(75% 60% at 50% 115%,rgba(196,23,12,.5),transparent 70%),linear-gradient(rgba(18,10,10,.80),rgba(18,10,10,.90)),url(/assets/problema.webp) center/cover #1b1212}
 .pb .lbl{color:#ff9a8e}
 .sl{background:radial-gradient(75% 60% at 50% 115%,rgba(96,192,152,.42),transparent 70%),#10282c}
 .sl .lbl{color:#8fdcb2}
@@ -136,12 +145,12 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 .prod p{margin:0 auto;max-width:26rem;color:var(--gray)}
 .prod .ph{position:relative;flex:1;min-height:22rem}
 .prod .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.prod .ph.sk img{object-fit:contain;padding:1.5rem 2rem 2rem;mix-blend-mode:multiply}
+.prod .ph.sk img{object-fit:contain;padding:.5rem 2.5rem 2rem}
 .moto{margin-top:1.25rem;display:grid;grid-template-columns:1fr 1fr;background:var(--night);color:#fff}
 .moto .tx{order:-1;align-self:center;padding:clamp(2rem,5vw,4rem)}
 .moto h3{font-size:clamp(1.75rem,3vw + .5rem,2.6rem);line-height:1.08;font-weight:700;letter-spacing:-.03em;margin-bottom:1rem}
 .moto p{margin:0 0 .8rem;font-size:1.1875rem;line-height:1.4;color:#c7c7cc}
-.moto img{width:100%;height:100%;min-height:22rem;object-fit:cover;object-position:50% 40%}
+.moto img{width:100%;height:100%;min-height:22rem;object-fit:cover;object-position:35% 50%}
 
 /* Señal débil */
 .stats{display:grid;grid-template-columns:repeat(3,1fr)}
@@ -196,7 +205,7 @@ footer .brand img:last-child{width:5rem}
 @media(max-width:860px){
   header nav a:not(.btn){display:none}
   .stage,.how,.why,.prods,.moto,.moments,.who,.bizg,.fgrid,.stats{grid-template-columns:1fr}
-  .art{min-height:26rem}
+  .vids{grid-template-columns:minmax(0,22rem)}
   .how .ph-tile{min-height:22rem}
   .why article{min-height:22rem}
   .moto img{min-height:18rem}
@@ -236,6 +245,7 @@ footer .brand img:last-child{width:5rem}
   </a>
   <nav>
     <a href="#como">Cómo funciona</a>
+    <a href="#accion">En acción</a>
     <a href="#productos">Productos</a>
     <a href="#quien">Para quién</a>
     <a href="#instituciones">Instituciones</a>
@@ -257,7 +267,9 @@ footer .brand img:last-child{width:5rem}
   </div>
   <div class="w stage">
     <div class="tile art" data-r>
-      <img src="/assets/hero-primeros-auxilios.webp" width="640" height="1146" alt="Un primer respondiente atiende a una persona en el suelo mientras escanea su pulsera con el teléfono" fetchpriority="high" decoding="async">
+      <video class="loop" muted loop playsinline preload="none" controls disablepictureinpicture poster="/assets/video/escaneo-casco.webp" aria-label="Un teléfono escanea el sticker de REFUA pegado en un casco y abre la ficha médica de emergencia">
+        <source src="/assets/video/escaneo-casco.mp4" type="video/mp4">
+      </video>
     </div>
     <div class="tile devwrap" data-r style="--i:1">
       <div class="phone">
@@ -279,7 +291,7 @@ footer .brand img:last-child{width:5rem}
   </div>
   <div class="how">
     <div class="tile ph-tile" data-r>
-      <img src="/assets/escena-accidente.webp" width="560" height="1213" loading="lazy" decoding="async" alt="Un rescatista atiende a un motociclista accidentado y consulta la ficha REFUA en un teléfono">
+      <img src="/assets/escena-accidente.webp" width="900" height="674" loading="lazy" decoding="async" alt="Un rescatista atiende a un motociclista inconsciente cuyo casco lleva el sticker de REFUA">
     </div>
     <ol class="tile steps" data-r style="--i:1">
       <li><b>1</b><div><h3>Se vincula el identificador</h3><p>La ficha médica de la persona se asocia a su pulsera, tarjeta o sticker desde el panel de administración.</p></div></li>
@@ -287,6 +299,32 @@ footer .brand img:last-child{width:5rem}
       <li><b>3</b><div><h3>Ve lo esencial y llama</h3><p>Grupo sanguíneo, alergias, patologías y medicación, con botones para llamar a los contactos de emergencia.</p></div></li>
     </ol>
   </div>
+</div></section>
+
+<section class="sec" id="accion"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Míralo en acción.</h2>
+    <p class="sub" data-r style="--i:1">Escanea, lee la ficha y llama en segundos.</p>
+  </div>
+  <div class="vids">
+    <figure class="vf" data-r>
+      <div class="tile vt">
+        <video controls preload="none" playsinline poster="/assets/video/fundadores.webp" aria-label="Los cofundadores de REFUA, Alonzho Rodríguez y Adrián García, explican por qué existe el proyecto">
+          <source src="/assets/video/fundadores.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption>Los cofundadores de REFUA, Alonzho Rodríguez y Adrián García.</figcaption>
+    </figure>
+    <figure class="vf" data-r style="--i:1">
+      <div class="tile vt">
+        <video class="loop" muted loop playsinline preload="none" controls disablepictureinpicture poster="/assets/video/escaneo-ilustrativo.webp" aria-label="Un teléfono se acerca al sticker de REFUA en un casco y muestra la ficha de emergencia">
+          <source src="/assets/video/escaneo-ilustrativo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption>Así se escanea el sticker en un casco.</figcaption>
+    </figure>
+  </div>
+  <p class="foot" data-r>Escenas ilustrativas del uso de REFUA.</p>
 </div></section>
 
 <section class="sec night" id="porque"><div class="w">
@@ -321,12 +359,12 @@ footer .brand img:last-child{width:5rem}
       <div class="tx"><h3>Pulsera</h3><p>Con el logo de REFUA y el código QR a la vista, siempre en la muñeca. Para uso diario, deporte o trabajo.</p></div>
     </article>
     <article class="tile prod" data-r style="--i:1">
-      <div class="ph sk"><img src="/assets/sticker.webp" width="520" height="463" loading="lazy" decoding="async" alt="Sticker triangular rojo de REFUA con código QR, chip NFC y grupo sanguíneo O+"></div>
+      <div class="ph sk"><img src="/assets/sticker.webp" width="640" height="569" loading="lazy" decoding="async" alt="Sticker triangular rojo de REFUA con código QR, chip NFC y grupo sanguíneo A+"></div>
       <div class="tx"><h3>Sticker de emergencia</h3><p>Triángulo rojo con QR, NFC y el grupo sanguíneo a la vista, fácil de reconocer a distancia.</p></div>
     </article>
   </div>
   <div class="tile moto" data-r>
-    <img src="/assets/sticker-en-uso.webp" width="560" height="795" loading="lazy" decoding="async" alt="Un teléfono escanea el sticker de REFUA pegado en un casco de moto">
+    <img src="/assets/sticker-en-uso.webp" width="860" height="502" loading="lazy" decoding="async" alt="Un teléfono escanea el sticker de REFUA pegado en un casco de moto">
     <div class="tx">
       <h3>Pensado también para motociclistas y conductores.</h3>
       <p>Pegado en el casco o en el vehículo, el sticker permite a quien llega primero al lugar acceder a la ficha sin tener que buscar documentos.</p>
@@ -451,6 +489,22 @@ footer .brand img:last-child{width:5rem}
     },{threshold:.12,rootMargin:"0px 0px -6% 0px"});
     els.forEach(function(el){io.observe(el)});
   }catch(err){document.documentElement.classList.remove("js")}
+})();
+</script>
+<script>
+(function(){
+  var vs=document.querySelectorAll("video.loop");
+  var c=navigator.connection;
+  var calm=(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)||(c&&(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")));
+  if(!vs.length||calm||!("IntersectionObserver"in window))return;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var v=e.target;
+      if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){v.controls=true})}
+      else v.pause();
+    });
+  },{threshold:.4});
+  vs.forEach(function(v){v.controls=false;io.observe(v)});
 })();
 </script>
 </body></html>
