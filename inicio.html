@@ -9,7 +9,7 @@
 <meta property="og:description" content="Alergias, patologías y contactos del paciente en segundos, con un escaneo QR o NFC.">
 <meta property="og:image" content="https://refua.com.ve/assets/og.jpg">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
-<link rel="preload" as="image" href="/assets/video/escaneo-casco.webp" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/poster-sticker.webp" fetchpriority="high">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <script>if("IntersectionObserver"in window)document.documentElement.classList.add("js")</script>
 <style>
@@ -76,7 +76,7 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 .stage{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:clamp(3rem,6vw,4.5rem);text-align:left}
 .tile{position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg2)}
 .art{aspect-ratio:4/5}
-.art video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;background:#000}
+
 .devwrap{display:grid;place-items:center;padding:2.5rem 1.5rem;background:radial-gradient(70% 45% at 50% 0%,#cfeee0,transparent 72%),linear-gradient(180deg,var(--mint),#fff)}
 .phone{position:relative;width:min(15.5rem,100%);aspect-ratio:9/18.4;padding:.5rem;border-radius:2.6rem;background:#0b0b0d;box-shadow:inset 0 0 0 2px #3a3a3c,0 32px 60px rgba(11,29,33,.28)}
 .phone::before{content:"";position:absolute;z-index:2;top:.95rem;left:50%;width:28%;height:1.05rem;margin-left:-14%;border-radius:99px;background:#000}
@@ -119,7 +119,14 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 .vids{display:grid;grid-template-columns:repeat(2,minmax(0,22rem));gap:1.5rem 2rem;justify-content:center}
 .vf{margin:0}
 .vt{aspect-ratio:9/16;background:#000}
-.vt video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.yt{position:absolute;inset:0;display:block;background:#000;cursor:pointer;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.yt .play{position:absolute;left:50%;top:50%;width:4.5rem;height:4.5rem;margin:-2.25rem 0 0 -2.25rem;border-radius:50%;background:rgba(255,255,255,.93);box-shadow:0 8px 24px rgba(0,0,0,.32);transition:transform .16s var(--ease-out)}
+.yt .play::before{content:"";position:absolute;left:50%;top:50%;margin:-.8rem 0 0 -.55rem;border-left:1.3rem solid var(--ink);border-top:.8rem solid transparent;border-bottom:.8rem solid transparent}
+.yt:active .play{transform:scale(.94)}
+.yt:focus-visible{outline-offset:-4px}
+@media (hover:hover) and (pointer:fine){.yt:hover .play{transform:scale(1.06)}}
+.tile iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 .vf figcaption{margin-top:.9rem;text-align:center;color:var(--gray);font-size:.9375rem}
 .foot{text-align:center;color:var(--gray);font-size:.8125rem;margin:2.25rem 0 0}
 
@@ -230,6 +237,7 @@ footer .brand img:last-child{width:5rem}
   html{scroll-behavior:auto}
   .js [data-r]{transform:none;transition:opacity .25s ease;transition-delay:0s}
   .btn,.btn:active{transition:none;transform:none}
+  .yt .play,.yt:active .play,.yt:hover .play{transition:none;transform:none}
   .more::after{transition:none}
 }
 @media(prefers-reduced-transparency:reduce){header{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}}
@@ -267,9 +275,10 @@ footer .brand img:last-child{width:5rem}
   </div>
   <div class="w stage">
     <div class="tile art" data-r>
-      <video class="loop" muted loop playsinline preload="none" controls disablepictureinpicture poster="/assets/video/escaneo-casco.webp" aria-label="Un teléfono escanea el sticker de REFUA pegado en un casco y abre la ficha médica de emergencia">
-        <source src="/assets/video/escaneo-casco.mp4" type="video/mp4">
-      </video>
+      <a class="yt" href="https://youtu.be/GXHBcOCYiZA" target="_blank" rel="noopener noreferrer" data-yt="GXHBcOCYiZA" data-title="El sticker de REFUA en uso en la calle" aria-label="Reproducir video: el sticker de REFUA en uso en la calle">
+        <img src="/assets/poster-sticker.webp" width="720" height="1280" alt="" fetchpriority="high" decoding="async">
+        <span class="play" aria-hidden="true"></span>
+      </a>
     </div>
     <div class="tile devwrap" data-r style="--i:1">
       <div class="phone">
@@ -309,19 +318,21 @@ footer .brand img:last-child{width:5rem}
   <div class="vids">
     <figure class="vf" data-r>
       <div class="tile vt">
-        <video controls preload="none" playsinline poster="/assets/video/fundadores.webp" aria-label="Los cofundadores de REFUA, Alonzho Rodríguez y Adrián García, explican por qué existe el proyecto">
-          <source src="/assets/video/fundadores.mp4" type="video/mp4">
-        </video>
+        <a class="yt" href="https://youtu.be/zk5b_rMgpZc" target="_blank" rel="noopener noreferrer" data-yt="zk5b_rMgpZc" data-title="Presentación de REFUA y sus cofundadores" aria-label="Reproducir video: presentación de REFUA y sus cofundadores">
+        <img src="/assets/poster-fundadores.webp" width="720" height="1280" alt="" loading="lazy" decoding="async">
+        <span class="play" aria-hidden="true"></span>
+      </a>
       </div>
       <figcaption>Los cofundadores de REFUA, Alonzho Rodríguez y Adrián García.</figcaption>
     </figure>
     <figure class="vf" data-r style="--i:1">
       <div class="tile vt">
-        <video class="loop" muted loop playsinline preload="none" controls disablepictureinpicture poster="/assets/video/escaneo-ilustrativo.webp" aria-label="Un teléfono se acerca al sticker de REFUA en un casco y muestra la ficha de emergencia">
-          <source src="/assets/video/escaneo-ilustrativo.mp4" type="video/mp4">
-        </video>
+        <a class="yt" href="https://youtu.be/L-1staZzSlA" target="_blank" rel="noopener noreferrer" data-yt="L-1staZzSlA" data-title="La pulsera de REFUA en una emergencia en la calle" aria-label="Reproducir video: la pulsera de REFUA en una emergencia en la calle">
+        <img src="/assets/pulsera.webp" width="640" height="603" alt="" loading="lazy" decoding="async" style="object-position:58% 50%">
+        <span class="play" aria-hidden="true"></span>
+      </a>
       </div>
-      <figcaption>Así se escanea el sticker en un casco.</figcaption>
+      <figcaption>La pulsera de REFUA en una emergencia en la calle.</figcaption>
     </figure>
   </div>
   <p class="foot" data-r>Escenas ilustrativas del uso de REFUA.</p>
@@ -493,18 +504,18 @@ footer .brand img:last-child{width:5rem}
 </script>
 <script>
 (function(){
-  var vs=document.querySelectorAll("video.loop");
-  var c=navigator.connection;
-  var calm=(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)||(c&&(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")));
-  if(!vs.length||calm||!("IntersectionObserver"in window))return;
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      var v=e.target;
-      if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){v.controls=true})}
-      else v.pause();
+  document.querySelectorAll("a.yt[data-yt]").forEach(function(a){
+    a.addEventListener("click",function(e){
+      e.preventDefault();
+      var f=document.createElement("iframe");
+      f.src="https://www.youtube-nocookie.com/embed/"+a.getAttribute("data-yt")+"?autoplay=1&rel=0&playsinline=1";
+      f.title=a.getAttribute("data-title")||"Video de REFUA";
+      f.allow="autoplay; encrypted-media; picture-in-picture; fullscreen";
+      f.setAttribute("allowfullscreen","");
+      f.setAttribute("referrerpolicy","strict-origin-when-cross-origin");
+      a.parentNode.replaceChild(f,a);
     });
-  },{threshold:.4});
-  vs.forEach(function(v){v.controls=false;io.observe(v)});
+  });
 })();
 </script>
 </body></html>
