@@ -175,6 +175,28 @@ h1 em{font-style:normal;background:linear-gradient(95deg,#b3140a,#e0472a);-webki
 .mm p{margin:0 0 1.4rem;color:var(--gray)}
 .mm .chips{margin-top:auto}
 
+/* Ecosistema / hoja de ruta */
+.pill{display:inline-block;padding:.32rem .85rem;border-radius:999px;font-size:.75rem;font-weight:700;letter-spacing:.01em;margin-bottom:1rem}
+.pill.ok{background:var(--mint2);color:var(--ok)}
+.pill.dev{background:#ffe9b8;color:#8a5a00}
+.pill.next{background:rgba(255,255,255,.1);color:#c7c7cc}
+.gray .pill.next{background:#e4e4e6;color:var(--gray)}
+.roadmap{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.rstep{position:relative;border-radius:var(--r);padding:2.1rem 1.6rem 1.9rem;background:#fff}
+.rstep b{display:block;font-size:.8125rem;font-weight:700;letter-spacing:.04em;color:var(--teal);text-transform:uppercase;margin-bottom:.5rem}
+.rstep h3{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;line-height:1.15}
+.rstep p{margin:0;color:var(--gray);font-size:.9375rem}
+
+/* Confianza y control de datos */
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem 2rem}
+.trust div{border-top:1px solid rgba(255,255,255,.18);padding-top:1.2rem}
+.trust h3{font-size:1.1875rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem}
+.trust p{margin:0;color:#c7c7cc}
+.trust a{color:#8fdcb2;text-decoration:underline}
+
+/* Visión / próximos servicios */
+.vision .mm{position:relative}
+
 /* Para quién */
 .who{display:grid;grid-template-columns:repeat(3,1fr);gap:2.75rem 2.25rem}
 .who div{border-top:1px solid var(--line);padding-top:1.2rem}
@@ -211,7 +233,7 @@ footer .brand img:last-child{width:5rem}
 
 @media(max-width:860px){
   header nav a:not(.btn){display:none}
-  .stage,.how,.why,.prods,.moto,.moments,.who,.bizg,.fgrid,.stats{grid-template-columns:1fr}
+  .stage,.how,.why,.prods,.moto,.moments,.who,.bizg,.fgrid,.stats,.roadmap,.trust{grid-template-columns:1fr}
   .vids{grid-template-columns:minmax(0,22rem)}
   .how .ph-tile{min-height:22rem}
   .why article{min-height:22rem}
@@ -253,6 +275,7 @@ footer .brand img:last-child{width:5rem}
   </a>
   <nav>
     <a href="#como">Cómo funciona</a>
+    <a href="#ecosistema">Ecosistema</a>
     <a href="#accion">En acción</a>
     <a href="#productos">Productos</a>
     <a href="#quien">Para quién</a>
@@ -285,6 +308,7 @@ footer .brand img:last-child{width:5rem}
         <div class="card" aria-label="Ejemplo de ficha de emergencia">
           <h2>Ficha de emergencia</h2>
           <div class="al"><small>Alergias</small><strong>Penicilina, látex</strong></div>
+          <div><small>Grupo sanguíneo</small><strong>O+</strong></div>
           <div><small>Patologías de base</small><strong>Diabetes tipo 2, hipertensión</strong></div>
           <div class="tel">Llamar: María (hija)<small>+58 412 000 0000</small></div>
         </div>
@@ -347,7 +371,7 @@ footer .brand img:last-child{width:5rem}
     <article class="pb" data-r>
       <span class="lbl">El problema</span>
       <h3>Minutos perdidos en la «hora dorada»</h3>
-      <p>Tratando de identificar a un paciente inconsciente o adivinando qué medicamento no administrarle.</p>
+      <p>La falta de información médica a tiempo es una de las causas de complicaciones evitables en emergencias: minutos tratando de identificar a un paciente inconsciente o adivinando qué medicamento no administrarle.</p>
       <ul class="chips"><li>¿Es diabético?</li><li>¿Es alérgico?</li><li>¿A quién llamo?</li></ul>
     </article>
     <article class="sl" data-r style="--i:1">
@@ -355,6 +379,35 @@ footer .brand img:last-child{width:5rem}
       <h3>Cero incertidumbre</h3>
       <p>Escaneo instantáneo desde un teléfono, sin aplicaciones ni registros.</p>
       <ul class="chips"><li>Alergias</li><li>Patologías y medicación</li><li>Contactos de emergencia</li></ul>
+    </article>
+  </div>
+</div></section>
+
+<section class="sec" id="ecosistema"><div class="w">
+  <div class="head">
+    <h2 class="t" data-r>Un ecosistema que crece contigo.</h2>
+    <p class="sub" data-r style="--i:1">La pulsera es la puerta de entrada. Detrás, construimos una red que conecta a cada persona con todo el sistema de salud.</p>
+  </div>
+  <div class="roadmap">
+    <article class="rstep" data-r>
+      <span class="pill ok">Disponible</span>
+      <h3>Identificación de emergencia</h3>
+      <p>Pulsera, sticker o tarjeta con la ficha médica vital, lista para escanear en segundos.</p>
+    </article>
+    <article class="rstep" data-r style="--i:1">
+      <span class="pill dev">En desarrollo</span>
+      <h3>Conexión con centros de salud</h3>
+      <p>Paramédicos, clínicas y aseguradoras coordinados para agilizar el traslado y la admisión del paciente.</p>
+    </article>
+    <article class="rstep" data-r style="--i:2">
+      <span class="pill next">Próximamente</span>
+      <h3>Historia clínica digital</h3>
+      <p>Sistemas internos para que clínicas y hospitales centralicen la atención de cada paciente.</p>
+    </article>
+    <article class="rstep" data-r style="--i:3">
+      <span class="pill next">Próximamente</span>
+      <h3>Red de salud y bienestar</h3>
+      <p>Especialistas, telemedicina, veterinaria y traslados, en un solo lugar, con orientación inicial asistida por IA.</p>
     </article>
   </div>
 </div></section>
@@ -393,6 +446,14 @@ footer .brand img:last-child{width:5rem}
     <div class="stat" data-r><b>~4 KB</b><p>Pesa lo que pesa una línea de texto: carga rápido incluso con conexión lenta.</p></div>
     <div class="stat" data-r style="--i:1"><b>2G / 3G</b><p>Diseñada para abrir con señal básica, con un botón para reintentar si la red falla.</p></div>
     <div class="stat" data-r style="--i:2"><b>0 apps</b><p>Se abre desde el navegador del teléfono: sin instalar nada y sin iniciar sesión.</p></div>
+  </div>
+  <div class="head" style="margin-top:clamp(3.5rem,7vw,5rem)">
+    <h2 class="t" data-r style="font-size:clamp(1.9rem,4vw,2.75rem)">Tú decides qué se muestra.</h2>
+  </div>
+  <div class="trust">
+    <div data-r><h3>Solo lo esencial</h3><p>Quien escanea ve la ficha de emergencia, nunca tu historial completo ni otros datos personales.</p></div>
+    <div data-r style="--i:1"><h3>Editable cuando quieras</h3><p>Tú decides qué campos muestra tu ficha y puedes actualizarla cuando cambie tu información.</p></div>
+    <div data-r style="--i:2"><h3>Con consentimiento informado</h3><p>El uso de tus datos médicos está sujeto a nuestra <a href="/privacidad.html">política de privacidad</a> y <a href="/consentimiento.html">consentimiento informado</a>.</p></div>
   </div>
 </div></section>
 
@@ -438,6 +499,28 @@ footer .brand img:last-child{width:5rem}
   </div>
 </div></section>
 
+<section class="sec gray vision" id="vision"><div class="w">
+  <div class="head">
+    <span class="pill next" data-r>Hacia dónde vamos</span>
+    <h2 class="t" data-r style="--i:1">Más allá de la emergencia.</h2>
+    <p class="sub" data-r style="--i:2">La visión de REFUA es convertirse en la puerta de entrada a todo el sistema de salud: desde la emergencia hasta la consulta, el tratamiento y el seguimiento.</p>
+  </div>
+  <div class="moments">
+    <article class="tile mm" data-r>
+      <h3>Especialistas y telemedicina</h3>
+      <p>Encuentra, compara y agenda consultas médicas, presenciales o en línea, desde una sola app.</p>
+    </article>
+    <article class="tile mm" data-r style="--i:1">
+      <h3>Orientación inicial con IA</h3>
+      <p>Describe lo que te sucede y recibe una primera orientación, sin sustituir la evaluación de un profesional.</p>
+    </article>
+    <article class="tile mm" data-r style="--i:2">
+      <h3>Veterinaria y traslados</h3>
+      <p>La misma experiencia para tus mascotas, además de solicitar y comparar ambulancias cuando lo necesites.</p>
+    </article>
+  </div>
+</div></section>
+
 <section class="end"><div class="w">
   <h2 data-r>Mira cómo se ve una ficha real.</h2>
   <p data-r style="--i:1">Abre el ejemplo en tu teléfono y comprueba lo rápido que carga.</p>
@@ -464,8 +547,9 @@ footer .brand img:last-child{width:5rem}
       <p>Un producto de adopción universal por debajo de los $5, diseñado sin barreras económicas para proteger a millones.</p>
     </article>
   </div>
-  <div class="bizcta" data-r>
+  <div class="bizcta cta" data-r>
     <a class="btn btn-w btn-xl" href="mailto:contacto@refua.com.ve?subject=REFUA%20-%20Instituciones%20e%20Inversiones">Hablar con el equipo de REFUA / Inversiones</a>
+    <a class="more" style="color:#fff" href="mailto:contacto@refua.com.ve?subject=REFUA%20-%20Quiero%20ser%20profesional%20aliado">Soy profesional de salud</a>
   </div>
 </div></section>
 </main>
